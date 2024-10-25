@@ -60,7 +60,9 @@ function App() {
       <header className="App-header">
         <h1>Elpris vs. Fjernvarmepris</h1>
 
-        <p>{new Date().toLocaleDateString('da-DK', dateOptions)}</p>
+        <p style={{ marginBottom: '30px' }}>
+          {new Date().toLocaleDateString('da-DK', dateOptions)}
+        </p>
 
         {currentPrice && (
           <div className="current-price">
@@ -134,7 +136,7 @@ function App() {
             })}
           </tbody>
         </table>
-        <p style={{ fontStyle: 'italic' }}>
+        <p className="italic">
           Priserne er inklusiv statsafgifter, men eksklusiv moms.
         </p>
       </header>
