@@ -109,8 +109,20 @@ function App() {
           <tbody>
             {electricityPrices.map((price, index) => {
               const isElectricityCheaper = price.DKK_per_kWh < HEAT_PRICE_KWH;
+              const isCurrentInterval =
+                currentPrice &&
+                price.time_start === currentPrice.time_start &&
+                price.time_end === currentPrice.time_end;
+
               return (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  style={{
+                    borderColor: isCurrentInterval ? '#c2a504' : '',
+                    borderWidth: isCurrentInterval ? '2px' : '',
+                    borderStyle: isCurrentInterval ? 'solid' : '',
+                  }}
+                >
                   <td>
                     {new Date(price.time_start).toLocaleTimeString(
                       'da-DK',
