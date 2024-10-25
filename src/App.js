@@ -1,7 +1,8 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 
-const HEAT_PRICE_KWH = 0.4;
+// https://sparenergi.dk/privat/energipriser-paa-sparenergi
+const HEAT_PRICE_KWH = 0.84;
 const ELECTRICIY_TAX_RATE = 0.761;
 
 function App() {
@@ -59,7 +60,6 @@ function App() {
       <header className="App-header">
         <h1>Elpris vs. Fjernvarmepris</h1>
 
-        {/* Display the current date */}
         <p>{new Date().toLocaleDateString('da-DK', dateOptions)}</p>
 
         {currentPrice && (
