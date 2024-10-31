@@ -8,9 +8,8 @@ function Home() {
         <h1>AEY</h1>
         <Link to="/today">
           <button
+            className="navigation-button"
             style={{
-              padding: '10px 20px',
-              fontSize: '1.2em',
               marginBottom: '30px',
             }}
           >
@@ -18,9 +17,7 @@ function Home() {
           </button>
         </Link>
         <Link to="/simulation">
-          <button style={{ padding: '10px 20px', fontSize: '1.2em' }}>
-            Simulation for 2023
-          </button>
+          <button className="navigation-button">Simulation for 2023</button>
         </Link>
       </header>
     </div>

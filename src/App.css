@@ -36,6 +36,11 @@ h4 {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
 
+.current-price:hover {
+  background-color: #555; /* Darker background on hover */
+  transition: background-color 0.2s ease;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -103,9 +108,27 @@ p.italic {
   cursor: pointer;
   color: white;
   font-weight: bolder;
+  font-size: 0.4em;
   transition: background-color 0.2s ease;
 }
 
 .back-button:hover {
+  background-color: #555;
+}
+
+.navigation-button {
+  padding: 10px 20px;
+  border-width: 0;
+  background-color: #3c4043;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  cursor: pointer;
+  color: white;
+  font-weight: bolder;
+  font-size: 0.9em;
+  transition: background-color 0.2s ease;
+}
+
+.navigation-button:hover {
   background-color: #555;
 }
