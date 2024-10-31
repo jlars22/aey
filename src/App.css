@@ -34,11 +34,11 @@ h4 {
   padding-left: 50px;
   margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  transition: background-color 0.2s ease; /* Smooth transition */
 }
 
 .current-price:hover {
   background-color: #555; /* Darker background on hover */
-  transition: background-color 0.2s ease;
 }
 
 table {
@@ -73,9 +73,12 @@ tr:nth-child(even) {
   background-color: #323639; /* Zebra stripes for even rows */
 }
 
+tr {
+  transition: background-color 0.2s ease; /* Smooth transition */
+}
+
 tr:hover {
   background-color: #555; /* Highlight row on hover */
-  transition: background-color 0.2s ease;
 }
 
 p {
@@ -109,7 +112,7 @@ p.italic {
   color: white;
   font-weight: bolder;
   font-size: 0.4em;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease; /* Smooth transition */
 }
 
 .back-button:hover {
@@ -126,7 +129,7 @@ p.italic {
   color: white;
   font-weight: bolder;
   font-size: 0.9em;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease; /* Smooth transition */
 }
 
 .navigation-button:hover {
