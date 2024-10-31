@@ -1,5 +1,6 @@
 import '../App.css';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // https://sparenergi.dk/privat/energipriser-paa-sparenergi
 const HEAT_PRICE_KWH = 0.84;
@@ -58,6 +59,9 @@ function Today() {
   return (
     <div className="App">
       <header className="App-header">
+        <Link to="/" className="back-button-container">
+          <button className="back-button">Back to Home</button>
+        </Link>
         <h1>Elpris vs. Fjernvarmepris</h1>
 
         <p style={{ marginBottom: '30px' }}>
@@ -66,7 +70,7 @@ function Today() {
 
         {currentPrice && (
           <div className="current-price">
-            <h2>Aktuel Timepris</h2>
+            <h4>Aktuel Timepris</h4>
             <p>
               Tidsinterval:{' '}
               {new Date(currentPrice.time_start).toLocaleTimeString(
