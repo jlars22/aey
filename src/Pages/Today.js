@@ -1,6 +1,8 @@
+import { Button } from '@mui/material';
 import '../App.css';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowLeftIcon } from '@mui/x-date-pickers';
 
 // https://sparenergi.dk/privat/energipriser-paa-sparenergi
 const HEAT_PRICE_KWH = 0.84;
@@ -67,7 +69,9 @@ function Today() {
         ) : (
           <>
             <Link to="/" className="back-button-container">
-              <button className="back-button">Back to Home</button>
+              <Button variant="outlined" startIcon={<ArrowLeftIcon />}>
+                Back to Home
+              </Button>
             </Link>
             <h1>Elpris vs. Fjernvarmepris</h1>
 
@@ -132,7 +136,7 @@ function Today() {
                     <tr
                       key={index}
                       style={{
-                        borderColor: isCurrentInterval ? '#c2a504' : '',
+                        borderColor: isCurrentInterval ? '#46AD8D' : '',
                         borderWidth: isCurrentInterval ? '2px' : '',
                         borderStyle: isCurrentInterval ? 'solid' : '',
                       }}
