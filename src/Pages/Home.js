@@ -13,7 +13,7 @@ function Home() {
               marginBottom: '30px',
             }}
           >
-            Electricity prices vs District heating prices for today
+            Elpris vs. Fjernvarmepris
           </button>
         </Link>
         <Link to="/simulation">
