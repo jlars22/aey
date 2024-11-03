@@ -1,8 +1,18 @@
-import { Button } from '@mui/material';
+import {
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  CircularProgress,
+  Box,
+} from '@mui/material';
+
 import '../App.css';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeftIcon } from '@mui/x-date-pickers';
+import BackButton from '../Components/BackButton';
+import { CalendarIcon } from '@mui/x-date-pickers';
 
 // https://sparenergi.dk/privat/energipriser-paa-sparenergi
 const HEAT_PRICE_KWH = 0.84;
@@ -65,65 +75,31 @@ function Today() {
     <div className="App">
       <header className="App-header">
         {loading ? (
-          <div className="spinner" />
+          <CircularProgress />
         ) : (
           <>
-            <Link to="/" className="back-button-container">
-              <Button variant="outlined" startIcon={<ArrowLeftIcon />}>
-                Back to Home
-              </Button>
-            </Link>
-            <h1>Elpris vs. Fjernvarmepris</h1>
+            <BackButton />
+            <Typography variant="h3" style={{ fontWeight: 'bold' }}>
+              ELPRIS VS. FJERNVARMEPRIS
+            </Typography>
 
-            <p style={{ marginBottom: '30px' }}>
-              {new Date().toLocaleDateString('da-DK', dateOptions)}
-            </p>
+            <Typography variant="h6">
+              <Box display="flex" alignItems="center">
+                <CalendarIcon style={{ marginRight: '8px' }} />
+                {new Date().toLocaleDateString('da-DK', dateOptions)}
+              </Box>
+            </Typography>
 
-            {currentPrice && (
-              <div className="current-price">
-                <h4>Aktuel Timepris</h4>
-                <p>
-                  Tidsinterval:{' '}
-                  {new Date(currentPrice.time_start).toLocaleTimeString(
-                    'da-DK',
-                    timeOptions
-                  )}{' '}
-                  -{' '}
-                  {new Date(currentPrice.time_end).toLocaleTimeString(
-                    'da-DK',
-                    timeOptions
-                  )}
-                </p>
-                <p>Elpris: {currentPrice.DKK_per_kWh.toFixed(2)} kr/kWh</p>
-                <p>Fjernvarmepris: {HEAT_PRICE_KWH.toFixed(2)} kr/kWh</p>
-                <p>
-                  Billigst:{' '}
-                  <span
-                    style={{
-                      color:
-                        currentPrice.DKK_per_kWh < HEAT_PRICE_KWH
-                          ? 'green'
-                          : 'red',
-                    }}
-                  >
-                    {currentPrice.DKK_per_kWh < HEAT_PRICE_KWH
-                      ? 'Strøm'
-                      : 'Fjernvarme'}
-                  </span>
-                </p>
-              </div>
-            )}
-
-            <table>
-              <thead>
-                <tr>
-                  <th>Tidsinterval</th>
-                  <th>Elpris (kr/kWh)</th>
-                  <th>Fjernvarmepris (kr/kWh)</th>
-                  <th>Billigst</th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Tidsinterval</TableCell>
+                  <TableCell>Elpris (kr/kWh)</TableCell>
+                  <TableCell>Fjernvarmepris (kr/kWh)</TableCell>
+                  <TableCell>Billigst</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {electricityPrices.map((price, index) => {
                   const isElectricityCheaper =
                     price.DKK_per_kWh < HEAT_PRICE_KWH;
@@ -133,7 +109,7 @@ function Today() {
                     price.time_end === currentPrice.time_end;
 
                   return (
-                    <tr
+                    <TableRow
                       key={index}
                       style={{
                         borderColor: isCurrentInterval ? '#46AD8D' : '',
@@ -141,7 +117,7 @@ function Today() {
                         borderStyle: isCurrentInterval ? 'solid' : '',
                       }}
                     >
-                      <td>
+                      <TableCell>
                         {new Date(price.time_start).toLocaleTimeString(
                           'da-DK',
                           timeOptions
@@ -151,24 +127,28 @@ function Today() {
                           'da-DK',
                           timeOptions
                         )}
-                      </td>
-                      <td>{price.DKK_per_kWh.toFixed(2)} kr</td>
-                      <td>{HEAT_PRICE_KWH.toFixed(2)} kr</td>
-                      <td>
+                      </TableCell>
+                      <TableCell>{price.DKK_per_kWh.toFixed(2)} kr</TableCell>
+                      <TableCell>{HEAT_PRICE_KWH.toFixed(2)} kr</TableCell>
+                      <TableCell>
                         {isElectricityCheaper ? (
                           <span style={{ color: 'green' }}>Strøm</span>
                         ) : (
                           <span style={{ color: 'red' }}>Fjernvarme</span>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   );
                 })}
-              </tbody>
-            </table>
-            <p className="italic">
+              </TableBody>
+            </Table>
+            <Typography
+              variant="caption"
+              gutterBottom
+              sx={{ display: 'block', marginTop: '15px' }}
+            >
               Priserne er inklusiv statsafgifter, men eksklusiv moms.
-            </p>
+            </Typography>
           </>
         )}
       </header>

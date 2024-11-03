@@ -1,13 +1,10 @@
-import {
-  ArrowLeftIcon,
-  DateCalendar,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
+import BackButton from '../Components/BackButton';
+import { IoMdPlay } from 'react-icons/io';
 
 export default function Simulation() {
   const [currentDate, setCurrentDate] = useState(dayjs('2023-01-01'));
@@ -39,19 +36,22 @@ export default function Simulation() {
   return (
     <div className="App">
       <header className="App-header">
-        <Link to="/" className="back-button-container">
-          <Button variant="outlined" startIcon={<ArrowLeftIcon />}>
-            Back to Home
-          </Button>
-        </Link>
-        <h1>Simulation for 2023</h1>
+        <BackButton />
+        <Typography variant="h3" style={{ fontWeight: 'bold' }}>
+          ELPRIS VS. FJERNVARMEPRIS
+        </Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar value={currentDate} readOnly views={['day']} />
         </LocalizationProvider>
 
-        <button onClick={startSimulation} disabled={isRunning}>
+        <Button
+          variant="contained"
+          onClick={startSimulation}
+          disabled={isRunning}
+          startIcon={<IoMdPlay />}
+        >
           Start Simulation
-        </button>
+        </Button>
       </header>
     </div>
   );

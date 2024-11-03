@@ -1,23 +1,31 @@
-import '../App.css';
+import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import '../App.css';
 
 function Home() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>AEY</h1>
+        <Typography variant="h1" gutterBottom style={{ fontWeight: 'bold' }}>
+          AEY
+        </Typography>
         <Link to="/today">
-          <button
-            className="navigation-button"
-            style={{
-              marginBottom: '30px',
-            }}
+          <Button
+            variant="contained"
+            style={{ marginBottom: '30px', fontWeight: 'bold' }}
+            size="large"
           >
             Elpris vs. Fjernvarmepris
-          </button>
+          </Button>
         </Link>
         <Link to="/simulation">
-          <button className="navigation-button">Simulation for 2023</button>
+          <Button
+            variant="contained"
+            style={{ fontWeight: 'bold' }}
+            size="large"
+          >
+            Simulation for 2023
+          </Button>
         </Link>
       </header>
     </div>
