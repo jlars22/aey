@@ -38,7 +38,7 @@ export default function Simulation() {
       <header className="App-header">
         <BackButton />
         <Typography variant="h3" style={{ fontWeight: 'bold' }}>
-          ELPRIS VS. FJERNVARMEPRIS
+          SIMULATION FOR 2023
         </Typography>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DateCalendar value={currentDate} readOnly views={['day']} />
