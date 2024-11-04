@@ -89,7 +89,7 @@ export default function Simulation() {
               input: {
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <MdElectricBolt />
+                    <MdElectricBolt color='#46AD8D' size='20' />
                   </InputAdornment>
                 ),
 
@@ -114,7 +114,7 @@ export default function Simulation() {
               input: {
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <LiaIndustrySolid />
+                    <LiaIndustrySolid color='#46AD8D' size='20' />
                   </InputAdornment>
                 ),
 
@@ -132,7 +132,7 @@ export default function Simulation() {
               <DateCalendar value={currentDate} readOnly views={['day']} sx={{ marginTop: '20px' }} />
             </LocalizationProvider>
 
-            <List>
+            <List sx={{ marginTop: '9px' }}>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar sx={{ backgroundColor: '#46AD8D' }}>
