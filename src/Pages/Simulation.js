@@ -80,7 +80,7 @@ export default function Simulation() {
         </Typography>
         <Stack spacing={2}>
           <TextField
-            label="Energiforbrug"
+            label="Energiforbrug til opvarmning"
             variant="outlined"
             slotProps={{
               input: {
@@ -101,9 +101,10 @@ export default function Simulation() {
             }}
             helperText={
               <>
-                Angiv dit forventede energiforbrug pr. time i kWh. <br />
-                Standardværdien er 4.53 kWh/h svarende til en gennemsnitlig
-                husstand.
+                Angiv det forventede energiforbrug pr. time i kWh, udelukkende
+                til opvarmning af vand i vandbeholderen. <br />
+                Standardværdien er 4.53 kWh/h, baseret på gennemsnitligt
+                energiforbrug for en husstands vandvarmer.
               </>
             }
           />
