@@ -33,34 +33,40 @@ export default function Simulation() {
   const [co2Savings, setCo2Savings] = useState(0)
 
   useEffect(() => {
-    let timer
-    if (isRunning) {
-      timer = setInterval(async () => {
-        setCurrentDate((prevDate) => {
-          const nextDate = prevDate.add(1, 'day')
-          if (nextDate.year() > 2023) {
-            clearInterval(timer)
-            setIsRunning(false)
-            return prevDate
-          }
-          return nextDate
-        })
+    let isActive = true
 
-        const date = currentDate.toDate()
-        const data = await getPricesByDate(date)
+    const runSimulation = async () => {
+      if (!isRunning || currentDate.year() > 2023) {
+        setIsRunning(false)
+        setCurrentDate(dayjs('2023-12-31'))
+        return
+      }
 
-        const totalSavings = data.reduce((acc, price) => {
-          if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
-            console.log(price.DKK_per_kWh)
-            return acc + (HEAT_PRICE_KWH_2023 - price.DKK_per_kWh) * energyConsumption
-          }
-          return acc
-        }, 0)
+      const date = currentDate.toDate()
+      const data = await getPricesByDate(date)
 
+      const totalSavings = data.reduce((acc, price) => {
+        if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
+          return acc + (HEAT_PRICE_KWH_2023 - price.DKK_per_kWh) * energyConsumption
+        }
+        return acc
+      }, 0)
+
+      if (isActive) {
         setSavings((prevSavings) => prevSavings + totalSavings)
-      }, 500)
+        setCurrentDate((prevDate) => prevDate.add(1, 'day'))
+
+        runSimulation()
+      }
     }
-    return () => clearInterval(timer)
+
+    if (isRunning) {
+      runSimulation()
+    }
+
+    return () => {
+      isActive = false // Prevent state updates if the component unmounts
+    }
   }, [isRunning, currentDate, energyConsumption])
 
   const startSimulation = () => {
