@@ -30,7 +30,7 @@ export default function Simulation() {
   useEffect(() => {
     let timer;
     if (isRunning) {
-      timer = setInterval(() => {
+      timer = setInterval(async () => {
         setCurrentDate((prevDate) => {
           const nextDate = prevDate.add(1, 'day');
           if (nextDate.year() > 2023) {
@@ -40,10 +40,25 @@ export default function Simulation() {
           }
           return nextDate;
         });
+
+        const date = currentDate.toDate();
+        const data = await getPricesByDate(date);
+
+        const totalSavings = data.reduce((acc, price) => {
+          if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
+            return (
+              acc +
+              (HEAT_PRICE_KWH_2023 - price.DKK_per_kWh) * energyConsumption
+            );
+          }
+          return acc;
+        }, 0);
+
+        setSavings((prevSavings) => prevSavings + totalSavings);
       }, 500);
     }
     return () => clearInterval(timer);
-  }, [isRunning]);
+  }, [isRunning, currentDate, energyConsumption]);
 
   const startSimulation = () => {
     setCurrentDate(dayjs('2023-01-01'));
@@ -54,27 +69,6 @@ export default function Simulation() {
   const stopSimulation = () => {
     setIsRunning(false);
   };
-
-  useEffect(() => {
-    async function fetchElectricityPrices() {
-      const date = currentDate.toDate();
-
-      const data = await getPricesByDate(date);
-
-      const totalSavings = data.reduce((acc, price) => {
-        if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
-          return (
-            acc + (HEAT_PRICE_KWH_2023 - price.DKK_per_kWh) * energyConsumption
-          );
-        }
-        return acc;
-      }, 0);
-
-      setSavings(savings + totalSavings);
-    }
-    fetchElectricityPrices();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDate]);
 
   return (
     <div className="App">
