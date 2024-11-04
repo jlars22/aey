@@ -97,6 +97,7 @@ export default function Simulation() {
               }
             }}
             value={energyConsumption}
+            onChange={(e) => setEnergyConsumption(parseFloat(e.target.value))}
             helperText={
               <>
                 Angiv det forventede energiforbrug pr. time i kWh, udelukkende til opvarmning af vand i vandbeholderen.{' '}
