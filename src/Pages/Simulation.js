@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Button, Typography } from '@mui/material';
 import BackButton from '../Components/BackButton';
 import { IoMdPlay } from 'react-icons/io';
+import { getPricesByDate } from '../Api/Elprisenligenu';
 
 export default function Simulation() {
   const [currentDate, setCurrentDate] = useState(dayjs('2023-01-01'));
@@ -32,6 +33,17 @@ export default function Simulation() {
     setCurrentDate(dayjs('2023-01-01'));
     setIsRunning(true);
   };
+
+  useEffect(() => {
+    async function fetchElectricityPrices() {
+      const date = currentDate.toDate();
+
+      const data = await getPricesByDate(date);
+
+      console.log(data);
+    }
+    fetchElectricityPrices();
+  }, [currentDate]);
 
   return (
     <div className="App">

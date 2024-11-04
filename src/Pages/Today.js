@@ -8,15 +8,12 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-
 import '../App.css';
 import { useEffect, useState } from 'react';
 import BackButton from '../Components/BackButton';
 import { CalendarIcon } from '@mui/x-date-pickers';
-
-// https://sparenergi.dk/privat/energipriser-paa-sparenergi
-const HEAT_PRICE_KWH = 0.84;
-const ELECTRICIY_TAX_RATE = 0.761;
+import { HEAT_PRICE_KWH } from '../Constants';
+import { getPricesByDate } from '../Api/Elprisenligenu';
 
 function Today() {
   const [electricityPrices, setElectricityPrices] = useState([]);
@@ -26,34 +23,20 @@ function Today() {
   useEffect(() => {
     async function fetchElectricityPrices() {
       const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
 
-      try {
-        const response = await fetch(
-          `https://www.elprisenligenu.dk/api/v1/prices/${year}/${month}-${day}_DK2.json`
-        );
-        const data = await response.json();
+      const data = await getPricesByDate(today);
 
-        data.forEach((price) => {
-          price.DKK_per_kWh = price.DKK_per_kWh + ELECTRICIY_TAX_RATE;
-        });
+      setElectricityPrices(data);
 
-        setElectricityPrices(data);
+      const now = new Date();
+      const currentHourPrice = data.find((price) => {
+        const start = new Date(price.time_start);
+        const end = new Date(price.time_end);
+        return now >= start && now < end;
+      });
+      setCurrentPrice(currentHourPrice);
 
-        const now = new Date();
-        const currentHourPrice = data.find((price) => {
-          const start = new Date(price.time_start);
-          const end = new Date(price.time_end);
-          return now >= start && now < end;
-        });
-        setCurrentPrice(currentHourPrice);
-      } catch (error) {
-        console.error('Fejl ved hentning af elpriser:', error);
-      } finally {
-        setLoading(false);
-      }
+      setLoading(false);
     }
     fetchElectricityPrices();
   }, []);
