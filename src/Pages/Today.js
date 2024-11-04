@@ -1,73 +1,64 @@
-import {
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  CircularProgress,
-  Box,
-} from '@mui/material';
-import '../App.css';
-import { useEffect, useState } from 'react';
-import BackButton from '../Components/BackButton';
-import { CalendarIcon } from '@mui/x-date-pickers';
-import { HEAT_PRICE_KWH } from '../Constants';
-import { getPricesByDate } from '../Api/Elprisenligenu';
+import { Typography, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Box } from '@mui/material'
+import '../App.css'
+import { useEffect, useState } from 'react'
+import BackButton from '../Components/BackButton'
+import { CalendarIcon } from '@mui/x-date-pickers'
+import { HEAT_PRICE_KWH } from '../Constants'
+import { getPricesByDate } from '../Api/Elprisenligenu'
 
 function Today() {
-  const [electricityPrices, setElectricityPrices] = useState([]);
-  const [currentPrice, setCurrentPrice] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [electricityPrices, setElectricityPrices] = useState([])
+  const [currentPrice, setCurrentPrice] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchElectricityPrices() {
-      const today = new Date();
+      const today = new Date()
 
-      const data = await getPricesByDate(today);
+      const data = await getPricesByDate(today)
 
-      setElectricityPrices(data);
+      setElectricityPrices(data)
 
-      const now = new Date();
+      const now = new Date()
       const currentHourPrice = data.find((price) => {
-        const start = new Date(price.time_start);
-        const end = new Date(price.time_end);
-        return now >= start && now < end;
-      });
-      setCurrentPrice(currentHourPrice);
+        const start = new Date(price.time_start)
+        const end = new Date(price.time_end)
+        return now >= start && now < end
+      })
+      setCurrentPrice(currentHourPrice)
 
-      setLoading(false);
+      setLoading(false)
     }
-    fetchElectricityPrices();
-  }, []);
+    fetchElectricityPrices()
+  }, [])
 
   const timeOptions = {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: 'Europe/Copenhagen',
-  };
+    timeZone: 'Europe/Copenhagen'
+  }
   const dateOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    timeZone: 'Europe/Copenhagen',
-  };
+    timeZone: 'Europe/Copenhagen'
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className='App'>
+      <header className='App-header'>
         {loading ? (
           <CircularProgress />
         ) : (
           <>
             <BackButton />
-            <Typography variant="h3" style={{ fontWeight: 'bold' }}>
+            <Typography variant='h3' style={{ fontWeight: 'bold' }}>
               ELPRIS VS. FJERNVARMEPRIS
             </Typography>
 
-            <Typography variant="h6">
-              <Box display="flex" alignItems="center">
+            <Typography variant='h6'>
+              <Box display='flex' alignItems='center'>
                 <CalendarIcon style={{ marginRight: '8px' }} />
                 {new Date().toLocaleDateString('da-DK', dateOptions)}
               </Box>
@@ -84,12 +75,11 @@ function Today() {
               </TableHead>
               <TableBody>
                 {electricityPrices.map((price, index) => {
-                  const isElectricityCheaper =
-                    price.DKK_per_kWh < HEAT_PRICE_KWH;
+                  const isElectricityCheaper = price.DKK_per_kWh < HEAT_PRICE_KWH
                   const isCurrentInterval =
                     currentPrice &&
                     price.time_start === currentPrice.time_start &&
-                    price.time_end === currentPrice.time_end;
+                    price.time_end === currentPrice.time_end
 
                   return (
                     <TableRow
@@ -97,19 +87,12 @@ function Today() {
                       style={{
                         borderColor: isCurrentInterval ? '#46AD8D' : '',
                         borderWidth: isCurrentInterval ? '2px' : '',
-                        borderStyle: isCurrentInterval ? 'solid' : '',
+                        borderStyle: isCurrentInterval ? 'solid' : ''
                       }}
                     >
                       <TableCell>
-                        {new Date(price.time_start).toLocaleTimeString(
-                          'da-DK',
-                          timeOptions
-                        )}{' '}
-                        -{' '}
-                        {new Date(price.time_end).toLocaleTimeString(
-                          'da-DK',
-                          timeOptions
-                        )}
+                        {new Date(price.time_start).toLocaleTimeString('da-DK', timeOptions)} -{' '}
+                        {new Date(price.time_end).toLocaleTimeString('da-DK', timeOptions)}
                       </TableCell>
                       <TableCell>{price.DKK_per_kWh.toFixed(2)} kr</TableCell>
                       <TableCell>{HEAT_PRICE_KWH.toFixed(2)} kr</TableCell>
@@ -121,22 +104,18 @@ function Today() {
                         )}
                       </TableCell>
                     </TableRow>
-                  );
+                  )
                 })}
               </TableBody>
             </Table>
-            <Typography
-              variant="caption"
-              gutterBottom
-              sx={{ display: 'block', marginTop: '15px' }}
-            >
+            <Typography variant='caption' gutterBottom sx={{ display: 'block', marginTop: '15px' }}>
               Priserne er inklusiv statsafgifter, men eksklusiv moms.
             </Typography>
           </>
         )}
       </header>
     </div>
-  );
+  )
 }
 
-export default Today;
+export default Today
