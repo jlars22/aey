@@ -81,7 +81,7 @@ export default function Simulation() {
       <header className="App-header">
         <BackButton />
 
-        <Typography variant="h3" style={{ fontWeight: 'bold' }}>
+        <Typography variant="h3" style={{ fontWeight: 'bold' }} gutterBottom>
           SIMULATION FOR 2023
         </Typography>
         <Stack spacing={2}>
