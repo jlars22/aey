@@ -158,8 +158,8 @@ export default function Simulation() {
           </Button>
         </Stack>
 
-        <Stack>
-          <Typography variant="h5" component="h5" gutterBottom>
+        <Stack sx={{ marginTop: '20px' }}>
+          <Typography variant="h5" component="h5">
             Savings Summary
           </Typography>
           <Table>
@@ -172,6 +172,13 @@ export default function Simulation() {
               </TableRow>
             </TableBody>
           </Table>
+          <Typography
+            variant="caption"
+            gutterBottom
+            sx={{ display: 'block', marginTop: '15px' }}
+          >
+            Priserne er inklusiv statsafgifter, men eksklusiv moms.
+          </Typography>
         </Stack>
       </header>
     </div>
