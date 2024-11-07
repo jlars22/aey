@@ -42,8 +42,7 @@ export default function Simulation() {
         return
       }
 
-      const date = currentDate.toDate()
-      const data = await getPricesByDate(date)
+      const data = await getPricesByDate(currentDate.toDate())
 
       const totalSavings = data.reduce((acc, price) => {
         if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
@@ -103,7 +102,8 @@ export default function Simulation() {
               }
             }}
             value={energyConsumption}
-            onChange={(e) => setEnergyConsumption(parseFloat(e.target.value))}
+            // @ts-ignore
+            onChange={(e) => setEnergyConsumption(e.target.value)}
             helperText={
               <>
                 Angiv det forventede energiforbrug pr. time i kWh, udelukkende til opvarmning af vand i vandbeholderen.{' '}
