@@ -16,7 +16,7 @@ function Home() {
         </Link>
         <Link to='/simulation'>
           <Button variant='contained' style={{ fontWeight: 'bold' }} size='large'>
-            Simulation for 2023
+            Simulation
           </Button>
         </Link>
       </header>

@@ -88,7 +88,7 @@ export default function Simulation() {
         <BackButton />
 
         <Typography variant='h3' style={{ fontWeight: 'bold' }} gutterBottom>
-          SIMULATION FOR 2023
+          SIMULATION
         </Typography>
         <Stack spacing={2}>
           <TextField
