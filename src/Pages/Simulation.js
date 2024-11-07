@@ -201,7 +201,8 @@ export default function Simulation() {
           </Button>
 
           <FormHelperText>
-            Alle værdierne og de anvendte elspotpriser samt udendørs temperaturer er eksempler fra Danmark i 2023.
+            Alle eksempel værdierne og de anvendte elspotpriser samt udendørs temperaturer er eksempler fra Danmark i
+            2023.
           </FormHelperText>
         </Stack>
 
