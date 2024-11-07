@@ -14,7 +14,7 @@ import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
 import { CiTempHigh } from 'react-icons/ci'
-import { FaPlay } from 'react-icons/fa'
+import { FaPlay, FaSadTear } from 'react-icons/fa'
 import { GiHeatHaze } from 'react-icons/gi'
 import { RiGovernmentFill } from 'react-icons/ri'
 
@@ -109,6 +109,7 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
+            helperText='Indtast den ønskede indendørs temperatur i grader Celsius.'
           />
 
           <TextField
@@ -129,6 +130,7 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
+            helperText='Indtast prisen for fjernvarme i kroner per megawatt-time.'
           />
 
           <TextField
@@ -149,6 +151,7 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={tarif}
             onChange={(e) => setTarif(e.target.value)}
+            helperText='Indtast tarifen for elektricitet i kroner per megawatt-time.'
           />
 
           <TextField
@@ -169,6 +172,7 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={statsafgift}
             onChange={(e) => setStatsafgift(e.target.value)}
+            helperText='Indtast statsafgiften for elektricitet i kroner per megawatt-time.'
           />
 
           <TextField
@@ -189,6 +193,7 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={moms}
             onChange={(e) => setMoms(e.target.value)}
+            helperText='Indtast momssatsen i procent.'
           />
 
           <FormHelperText>Alle værdierne er eksempler for 2023 i Danmark.</FormHelperText>
@@ -222,9 +227,11 @@ export default function Simulation() {
               produkt.
             </Typography>
           ) : (
-            <Typography variant='h6' color='red'>
-              Du kan ikke desværre ikke spare penge ved at bruge vores produkt.
-            </Typography>
+            <>
+              <Typography variant='h6' color='red'>
+                Du kan ikke desværre ikke spare penge ved at bruge vores produkt.
+              </Typography>
+            </>
           )}
         </Box>
       </header>
