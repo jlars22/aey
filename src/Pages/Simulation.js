@@ -106,7 +106,6 @@ export default function Simulation() {
               }
             }}
             placeholder={'17'}
-            style={{ width: '500px' }}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
             helperText='Indtast den ønskede indendørs temperatur i grader Celsius.'
@@ -127,7 +126,6 @@ export default function Simulation() {
               }
             }}
             placeholder={'725'}
-            style={{ width: '500px' }}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
             helperText='Indtast prisen for fjernvarme i kroner per megawatt-time.'
@@ -148,7 +146,6 @@ export default function Simulation() {
               }
             }}
             placeholder={'1139.5'}
-            style={{ width: '500px' }}
             value={tarif}
             onChange={(e) => setTarif(e.target.value)}
             helperText='Indtast tarifen for elektricitet i kroner per megawatt-time.'
@@ -169,7 +166,6 @@ export default function Simulation() {
               }
             }}
             placeholder={'761'}
-            style={{ width: '500px' }}
             value={statsafgift}
             onChange={(e) => setStatsafgift(e.target.value)}
             helperText='Indtast statsafgiften for elektricitet i kroner per megawatt-time.'
@@ -190,13 +186,10 @@ export default function Simulation() {
               }
             }}
             placeholder={'25'}
-            style={{ width: '500px' }}
             value={moms}
             onChange={(e) => setMoms(e.target.value)}
             helperText='Indtast momssatsen i procent.'
           />
-
-          <FormHelperText>Alle værdierne er eksempler for 2023 i Danmark.</FormHelperText>
 
           <Button
             variant='contained'
@@ -206,6 +199,10 @@ export default function Simulation() {
           >
             START SIMULATION
           </Button>
+
+          <FormHelperText>
+            Alle værdierne og de anvendte elspotpriser samt udendørs temperaturer er eksempler fra Danmark i 2023.
+          </FormHelperText>
         </Stack>
 
         <Box sx={{ marginTop: '20px' }}>
@@ -215,9 +212,9 @@ export default function Simulation() {
           {loading ? (
             <CircularProgress />
           ) : savingThreeKw === -1 ? (
-            <Typography variant='caption'>
+            <FormHelperText>
               Indtast venligst værdierne og tryk på "Start Simulation" for at se resultatet.
-            </Typography>
+            </FormHelperText>
           ) : savingThreeKw > 0 ? (
             <Typography variant='h6' color='primary'>
               Ved brug af en el-patron på 3 kW kan du spare {savingThreeKw.toFixed(2)} kr om året ved at bruge vores
