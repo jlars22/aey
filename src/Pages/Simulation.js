@@ -16,7 +16,8 @@ export default function Simulation() {
   const [statsafgift, setStatsafgift] = useState(761)
   const [moms, setMoms] = useState(25)
   const [loading, setLoading] = useState(false)
-  const [saving, setSaving] = useState()
+  const [savingThreeKw, setSavingThreeKw] = useState(0)
+  const [savingFiveKw, setSavingFiveKw] = useState(0)
 
   const [errors, setErrors] = useState({
     insideTemperature: false,
@@ -39,7 +40,8 @@ export default function Simulation() {
 
   const handleStartSimulation = () => {
     try {
-      setSaving(0)
+      setSavingThreeKw(0)
+      setSavingFiveKw(0)
       setLoading(true)
       if (Object.values(errors).some((error) => error)) {
         console.log('Please fix the errors before starting the simulation')
@@ -90,8 +92,8 @@ export default function Simulation() {
     })
 
     // Set the calculated total savings for controlled modes
-    setSaving({ threeKwControlled: totalSavingThreeKWControlled, fiveKwControlled: totalSavingFiveKWControlled })
-    console.log(saving)
+    setSavingThreeKw(totalSavingThreeKWControlled)
+    setSavingFiveKw(totalSavingFiveKWControlled)
   }
 
   return (
@@ -234,9 +236,13 @@ export default function Simulation() {
           </Typography>
           {loading ? (
             <CircularProgress />
-          ) : saving > 0 ? (
+          ) : savingThreeKw > 0 ? (
             <Typography variant='h6' color='primary'>
-              Du kan spare {saving.toFixed(2)} kr om året ved at bruge vores produkt.
+              Ved brug af en el-patron på 3 kW kan du spare {savingThreeKw.toFixed(2)} kr om året ved at bruge vores
+              produkt.
+              <br />
+              Ved brug af en el-patron på 5.2 kW kan du spare {savingFiveKw.toFixed(2)} kr om året ved at bruge vores
+              produkt.
             </Typography>
           ) : (
             <Typography variant='h6' color='red'>
