@@ -1,6 +1,15 @@
 // @ts-nocheck
 import React, { useState } from 'react'
-import { Typography, Stack, TextField, InputAdornment, Box, Button, CircularProgress } from '@mui/material'
+import {
+  Typography,
+  Stack,
+  TextField,
+  InputAdornment,
+  Box,
+  Button,
+  CircularProgress,
+  FormHelperText
+} from '@mui/material'
 import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
@@ -16,37 +25,14 @@ export default function Simulation() {
   const [statsafgift, setStatsafgift] = useState(761)
   const [moms, setMoms] = useState(25)
   const [loading, setLoading] = useState(false)
-  const [savingThreeKw, setSavingThreeKw] = useState(0)
-  const [savingFiveKw, setSavingFiveKw] = useState(0)
-
-  const [errors, setErrors] = useState({
-    insideTemperature: false,
-    districtHeatingPrice: false,
-    tarif: false,
-    statsafgift: false,
-    moms: false
-  })
-
-  const validateNumber = (value) => {
-    return !isNaN(value) && value !== '' && !value.includes(',')
-  }
-
-  const handleBlur = (field, value) => {
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [field]: !validateNumber(value)
-    }))
-  }
+  const [savingThreeKw, setSavingThreeKw] = useState(-1)
+  const [savingFiveKw, setSavingFiveKw] = useState(-1)
 
   const handleStartSimulation = () => {
     try {
-      setSavingThreeKw(0)
-      setSavingFiveKw(0)
+      setSavingThreeKw(-1)
+      setSavingFiveKw(-1)
       setLoading(true)
-      if (Object.values(errors).some((error) => error)) {
-        console.log('Please fix the errors before starting the simulation')
-        return
-      }
 
       calculateSaving()
     } catch (error) {
@@ -123,9 +109,6 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
-            onBlur={() => handleBlur('insideTemperature', insideTemperature)}
-            error={errors.insideTemperature}
-            helperText={errors.insideTemperature ? 'Please enter a valid number without commas' : ''}
           />
 
           <TextField
@@ -146,9 +129,6 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
-            onBlur={() => handleBlur('districtHeatingPrice', districtHeatingPrice)}
-            error={errors.districtHeatingPrice}
-            helperText={errors.districtHeatingPrice ? 'Please enter a valid number without commas' : ''}
           />
 
           <TextField
@@ -169,9 +149,6 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={tarif}
             onChange={(e) => setTarif(e.target.value)}
-            onBlur={() => handleBlur('tarif', tarif)}
-            error={errors.tarif}
-            helperText={errors.tarif ? 'Please enter a valid number without commas' : ''}
           />
 
           <TextField
@@ -192,9 +169,6 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={statsafgift}
             onChange={(e) => setStatsafgift(e.target.value)}
-            onBlur={() => handleBlur('statsafgift', statsafgift)}
-            error={errors.statsafgift}
-            helperText={errors.statsafgift ? 'Please enter a valid number without commas' : ''}
           />
 
           <TextField
@@ -215,10 +189,9 @@ export default function Simulation() {
             style={{ width: '500px' }}
             value={moms}
             onChange={(e) => setMoms(e.target.value)}
-            onBlur={() => handleBlur('moms', moms)}
-            error={errors.moms}
-            helperText={errors.moms ? 'Please enter a valid number without commas' : ''}
           />
+
+          <FormHelperText>Alle værdierne er eksempler for 2023 i Danmark.</FormHelperText>
 
           <Button
             variant='contained'
@@ -236,6 +209,10 @@ export default function Simulation() {
           </Typography>
           {loading ? (
             <CircularProgress />
+          ) : savingThreeKw === -1 ? (
+            <Typography variant='caption'>
+              Indtast venligst værdierne og tryk på "Start Simulation" for at se resultatet.
+            </Typography>
           ) : savingThreeKw > 0 ? (
             <Typography variant='h6' color='primary'>
               Ved brug af en el-patron på 3 kW kan du spare {savingThreeKw.toFixed(2)} kr om året ved at bruge vores
