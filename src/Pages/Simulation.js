@@ -1,82 +1,61 @@
-import { DateCalendar, LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import React, { useState, useEffect } from 'react'
-import dayjs from 'dayjs'
-import {
-  Button,
-  Typography,
-  Stack,
-  TextField,
-  InputAdornment,
-  Box,
-  Grid2,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText
-} from '@mui/material'
+// @ts-nocheck
+import React, { useState } from 'react'
+import { Typography, Stack, TextField, InputAdornment, Box, Button, CircularProgress } from '@mui/material'
 import BackButton from '../Components/BackButton'
-import { IoMdPlay } from 'react-icons/io'
-import { getPricesByDate } from '../Api/Elprisenligenu'
 import { HEAT_PRICE_KWH_2023 } from '../Constants'
-import { FaStop } from 'react-icons/fa'
-import { MdAttachMoney, MdElectricBolt } from 'react-icons/md'
-import { LiaIndustrySolid } from 'react-icons/lia'
-import { IoEarth } from 'react-icons/io5'
+import { MdElectricBolt } from 'react-icons/md'
+import { getData } from 'Api/data'
+import { CiTempHigh } from 'react-icons/ci'
+import { FaPlay } from 'react-icons/fa'
+import { GiHeatHaze } from 'react-icons/gi'
+import { RiGovernmentFill } from 'react-icons/ri'
 
 export default function Simulation() {
-  const [currentDate, setCurrentDate] = useState(dayjs('2023-01-01'))
-  const [isRunning, setIsRunning] = useState(false)
-  const [savings, setSavings] = useState(0)
-  const [energyConsumption, setEnergyConsumption] = useState(4.53)
-  const [co2Savings, setCo2Savings] = useState(0)
+  const [districtHeatingPrice, setDistrictHeatingPrice] = useState(725)
+  const [insideTemperature, setInsideTemperature] = useState(17)
+  const [tarif, setTarif] = useState(1139.5)
+  const [statsafgift, setStatsafgift] = useState(761)
+  const [moms, setMoms] = useState(25)
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(0)
 
-  useEffect(() => {
-    let isActive = true
+  const [errors, setErrors] = useState({
+    insideTemperature: false,
+    districtHeatingPrice: false,
+    tarif: false,
+    statsafgift: false,
+    moms: false
+  })
 
-    const runSimulation = async () => {
-      if (!isRunning || currentDate.year() > 2023) {
-        setIsRunning(false)
-        setCurrentDate(dayjs('2023-12-31'))
+  const validateNumber = (value) => {
+    return !isNaN(value) && value !== '' && !value.includes(',')
+  }
+
+  const handleBlur = (field, value) => {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: !validateNumber(value)
+    }))
+  }
+
+  const handleStartSimulation = () => {
+    try {
+      setSaving(0)
+      setLoading(true)
+      if (Object.values(errors).some((error) => error)) {
+        console.log('Please fix the errors before starting the simulation')
         return
       }
 
-      const data = await getPricesByDate(currentDate.toDate())
-
-      const totalSavings = data.reduce((acc, price) => {
-        if (price.DKK_per_kWh < HEAT_PRICE_KWH_2023) {
-          return acc + (HEAT_PRICE_KWH_2023 - price.DKK_per_kWh) * energyConsumption
-        }
-        return acc
-      }, 0)
-
-      if (isActive) {
-        setSavings((prevSavings) => prevSavings + totalSavings)
-        setCurrentDate((prevDate) => prevDate.add(1, 'day'))
-
-        runSimulation()
-      }
+      calculateSaving()
+    } catch (error) {
+      console.error('An error occurred while starting the simulation', error)
+    } finally {
+      setLoading(false)
     }
-
-    if (isRunning) {
-      runSimulation()
-    }
-
-    return () => {
-      isActive = false // Prevent state updates if the component unmounts
-    }
-  }, [isRunning, currentDate, energyConsumption])
-
-  const startSimulation = () => {
-    setCurrentDate(dayjs('2023-01-01'))
-    setSavings(0)
-    setIsRunning(true)
   }
 
-  const stopSimulation = () => {
-    setIsRunning(false)
-  }
+  const calculateSaving = () => {}
 
   return (
     <div className='App'>
@@ -88,7 +67,53 @@ export default function Simulation() {
         </Typography>
         <Stack spacing={2}>
           <TextField
-            label='Energiforbrug til opvarmning'
+            label='Inde temperatur'
+            variant='outlined'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <CiTempHigh color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>°C</InputAdornment>
+              }
+            }}
+            placeholder={17}
+            style={{ width: '500px' }}
+            value={insideTemperature}
+            onChange={(e) => setInsideTemperature(e.target.value)}
+            onBlur={() => handleBlur('insideTemperature', insideTemperature)}
+            error={errors.insideTemperature}
+            helperText={errors.insideTemperature ? 'Please enter a valid number without commas' : ''}
+          />
+
+          <TextField
+            label='Fjernevarmepris'
+            variant='outlined'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <GiHeatHaze color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
+              }
+            }}
+            placeholder={725}
+            style={{ width: '500px' }}
+            value={districtHeatingPrice}
+            onChange={(e) => setDistrictHeatingPrice(e.target.value)}
+            onBlur={() => handleBlur('districtHeatingPrice', districtHeatingPrice)}
+            error={errors.districtHeatingPrice}
+            helperText={errors.districtHeatingPrice ? 'Please enter a valid number without commas' : ''}
+          />
+
+          <TextField
+            label='Tarif'
             variant='outlined'
             slotProps={{
               input: {
@@ -98,80 +123,90 @@ export default function Simulation() {
                   </InputAdornment>
                 ),
 
-                endAdornment: <InputAdornment position='end'>kWh/h</InputAdornment>
+                endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
               }
             }}
-            value={energyConsumption}
-            // @ts-ignore
-            onChange={(e) => setEnergyConsumption(e.target.value)}
-            helperText={
-              <>
-                Angiv det forventede energiforbrug pr. time i kWh, udelukkende til opvarmning af vand i vandbeholderen.{' '}
-                <br />
-                Standardværdien er 4.53 kWh/h, baseret på gennemsnitligt energiforbrug for en husstands vandvarmer.
-              </>
-            }
+            placeholder={'1139.5'}
+            style={{ width: '500px' }}
+            value={tarif}
+            onChange={(e) => setTarif(e.target.value)}
+            onBlur={() => handleBlur('tarif', tarif)}
+            error={errors.tarif}
+            helperText={errors.tarif ? 'Please enter a valid number without commas' : ''}
           />
+
           <TextField
-            disabled
-            label='Fjernevarmepris'
+            label='Statsafgift'
             variant='outlined'
             slotProps={{
               input: {
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <LiaIndustrySolid color='#46AD8D' size='20' />
+                    <RiGovernmentFill color='#46AD8D' size='20' />
                   </InputAdornment>
                 ),
 
-                endAdornment: <InputAdornment position='end'>kr/kWh</InputAdornment>
+                endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
               }
             }}
-            value={HEAT_PRICE_KWH_2023}
-            helperText={<>Gennemsnitlig fjernvarmepris for 2023.</>}
+            placeholder={'761'}
+            style={{ width: '500px' }}
+            value={statsafgift}
+            onChange={(e) => setStatsafgift(e.target.value)}
+            onBlur={() => handleBlur('statsafgift', statsafgift)}
+            error={errors.statsafgift}
+            helperText={errors.statsafgift ? 'Please enter a valid number without commas' : ''}
           />
+
+          <TextField
+            label='Moms'
+            variant='outlined'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <RiGovernmentFill color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>%</InputAdornment>
+              }
+            }}
+            placeholder={'25'}
+            style={{ width: '500px' }}
+            value={moms}
+            onChange={(e) => setMoms(e.target.value)}
+            onBlur={() => handleBlur('moms', moms)}
+            error={errors.moms}
+            helperText={errors.moms ? 'Please enter a valid number without commas' : ''}
+          />
+
+          <Button
+            variant='contained'
+            style={{ fontWeight: 'bold' }}
+            startIcon={<FaPlay size='17' />}
+            onClick={handleStartSimulation}
+          >
+            START SIMULATION
+          </Button>
         </Stack>
 
-        <Box>
-          <Grid2 container>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateCalendar value={currentDate} readOnly views={['day']} sx={{ marginTop: '20px' }} />
-            </LocalizationProvider>
-
-            <List sx={{ marginTop: '9px' }}>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar sx={{ backgroundColor: '#46AD8D' }}>
-                    <MdAttachMoney color='white' />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary='DKK' secondary={`${savings.toFixed(2)} kr`} />
-              </ListItem>
-              <ListItem>
-                <ListItemAvatar>
-                  <Avatar sx={{ backgroundColor: '#46AD8D' }}>
-                    <IoEarth color='white' />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary='CO2' secondary='TODO' />
-              </ListItem>
-            </List>
-          </Grid2>
-
-          <Stack spacing={2}>
-            <Button variant='contained' onClick={startSimulation} disabled={isRunning} startIcon={<IoMdPlay />}>
-              Start Simulation
-            </Button>
-
-            <Button variant='contained' onClick={stopSimulation} disabled={!isRunning} startIcon={<FaStop />}>
-              Stop Simulation
-            </Button>
-          </Stack>
+        <Box sx={{ marginTop: '20px' }}>
+          <Typography variant='h4' style={{ fontWeight: 'bold' }} gutterBottom>
+            RESULTAT
+          </Typography>
+          {loading ? (
+            <CircularProgress />
+          ) : saving > 0 ? (
+            <Typography variant='h6' color='primary'>
+              Du kan spare {saving.toFixed(2)} kr om året ved at bruge vores produkt.
+            </Typography>
+          ) : (
+            <Typography variant='h6' color='red'>
+              Du kan ikke desværre ikke spare penge ved at bruge vores produkt.
+            </Typography>
+          )}
         </Box>
-
-        <Typography variant='caption' gutterBottom sx={{ display: 'block', marginTop: '15px' }}>
-          Priserne er inklusiv statsafgifter, men eksklusiv moms.
-        </Typography>
       </header>
     </div>
   )
