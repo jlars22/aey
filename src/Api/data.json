@@ -1,19 +1,5 @@
 [
     {
-        "outside_temp": "C",
-        "delta_temp": "K",
-        "heatloss": "kW",
-        "three_kw_effect": "kW",
-        "five_kw_effect": "kW",
-        "electricity_price": "Kr/MWh",
-        "electricity_price_and_extra": "Kr/MWh",
-        "three_kw_saving_always_on": "Kr/time",
-        "three_kw_saving_controlled": "Kr/time",
-        "five_kw_saving_always_on": "Kr/time",
-        "five_kw_saving_controlled": "Kr/time",
-        "": ""
-    },
-    {
         "outside_temp": "6.21",
         "delta_temp": "-6.21",
         "heatloss": "0.00",

@@ -2,7 +2,6 @@
 import React, { useState } from 'react'
 import { Typography, Stack, TextField, InputAdornment, Box, Button, CircularProgress } from '@mui/material'
 import BackButton from '../Components/BackButton'
-import { HEAT_PRICE_KWH_2023 } from '../Constants'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
 import { CiTempHigh } from 'react-icons/ci'
@@ -17,7 +16,7 @@ export default function Simulation() {
   const [statsafgift, setStatsafgift] = useState(761)
   const [moms, setMoms] = useState(25)
   const [loading, setLoading] = useState(false)
-  const [saving, setSaving] = useState(0)
+  const [saving, setSaving] = useState()
 
   const [errors, setErrors] = useState({
     insideTemperature: false,
@@ -55,7 +54,45 @@ export default function Simulation() {
     }
   }
 
-  const calculateSaving = () => {}
+  const calculateSaving = () => {
+    let totalSavingThreeKWControlled = 0
+    let totalSavingFiveKWControlled = 0
+
+    console.log(insideTemperature, districtHeatingPrice, tarif, statsafgift, moms)
+
+    // Iterate over each data entry and perform the calculations
+    getData().forEach((entry) => {
+      // Step 1: Calculate deltaT
+      const deltaT = insideTemperature - entry.outside_temp
+
+      // Step 2: Calculate heat loss
+      const heatloss = entry.outside_temp > insideTemperature ? 0 : (7.5 / 32) * deltaT
+
+      // Step 3: Calculate added effect for 3 kW and 5.2 kW
+      const threeKwEffect = Math.min(heatloss, 3)
+      const fiveKwEffect = Math.min(heatloss, 5.2)
+
+      // Step 4: Calculate electricity price with adjustments
+      const statsafgiftMedMoms = statsafgift * (moms / 100 + 1)
+      const adjustedElectricityPrice = parseFloat(entry.electricity_price) + tarif - statsafgiftMedMoms * 0.22
+
+      // Step 5: Calculate savings
+      const savingThreeKWAlwaysOn = ((districtHeatingPrice - adjustedElectricityPrice) * threeKwEffect) / 1000
+      const savingFiveKWAlwaysOn = ((districtHeatingPrice - adjustedElectricityPrice) * fiveKwEffect) / 1000
+
+      // Step 6: Calculate controlled savings
+      const savingThreeKWControlled = savingThreeKWAlwaysOn > 0 ? savingThreeKWAlwaysOn : 0
+      const savingFiveKWControlled = savingFiveKWAlwaysOn > 0 ? savingFiveKWAlwaysOn : 0
+
+      // Accumulate controlled savings for the final output
+      totalSavingThreeKWControlled += savingThreeKWControlled
+      totalSavingFiveKWControlled += savingFiveKWControlled
+    })
+
+    // Set the calculated total savings for controlled modes
+    setSaving({ threeKwControlled: totalSavingThreeKWControlled, fiveKwControlled: totalSavingFiveKWControlled })
+    console.log(saving)
+  }
 
   return (
     <div className='App'>
@@ -80,7 +117,7 @@ export default function Simulation() {
                 endAdornment: <InputAdornment position='end'>°C</InputAdornment>
               }
             }}
-            placeholder={17}
+            placeholder={'17'}
             style={{ width: '500px' }}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
@@ -103,7 +140,7 @@ export default function Simulation() {
                 endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
               }
             }}
-            placeholder={725}
+            placeholder={'725'}
             style={{ width: '500px' }}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
