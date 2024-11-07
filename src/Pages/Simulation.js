@@ -216,12 +216,14 @@ export default function Simulation() {
               Indtast venligst værdierne og tryk på "Start Simulation" for at se resultatet.
             </FormHelperText>
           ) : savingThreeKw > 0 ? (
-            <Typography variant='h6' color='primary'>
-              Ved brug af en el-patron på 3 kW kan du spare {savingThreeKw.toFixed(2)} kr om året ved at bruge vores
-              produkt.
+            <Typography variant='h6' color=''>
+              Ved brug af en el-patron på 3 kW kan du spare{' '}
+              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingThreeKw.toFixed(2)} kr</span> om året ved at
+              bruge vores produkt.
               <br />
-              Ved brug af en el-patron på 5.2 kW kan du spare {savingFiveKw.toFixed(2)} kr om året ved at bruge vores
-              produkt.
+              Ved brug af en el-patron på 5.2 kW kan du spare{' '}
+              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingFiveKw.toFixed(2)} kr</span> om året ved at
+              bruge vores produkt.
             </Typography>
           ) : (
             <>
