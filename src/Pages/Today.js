@@ -108,9 +108,6 @@ function Today() {
                 })}
               </TableBody>
             </Table>
-            <Typography variant='caption' gutterBottom sx={{ display: 'block', marginTop: '15px' }}>
-              Priserne er inklusiv statsafgifter, men eksklusiv moms.
-            </Typography>
           </>
         )}
       </header>
