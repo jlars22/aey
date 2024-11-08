@@ -14,7 +14,7 @@ import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
 import { CiTempHigh } from 'react-icons/ci'
-import { FaPlay, FaSadTear } from 'react-icons/fa'
+import { FaPlay } from 'react-icons/fa'
 import { GiHeatHaze } from 'react-icons/gi'
 import { RiGovernmentFill } from 'react-icons/ri'
 
@@ -46,27 +46,33 @@ export default function Simulation() {
     let totalSavingThreeKWControlled = 0
     let totalSavingFiveKWControlled = 0
 
-    console.log(insideTemperature, districtHeatingPrice, tarif, statsafgift, moms)
+    const parsedInsideTemperature = parseFloat(insideTemperature)
+    const parsedDistrictHeatingPrice = parseFloat(districtHeatingPrice)
+    const parsedTarif = parseFloat(tarif)
+    const parsedStatsafgift = parseFloat(statsafgift)
+    const parsedMoms = parseFloat(moms)
+
+    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTarif, parsedStatsafgift, parsedMoms)
 
     // Iterate over each data entry and perform the calculations
     getData().forEach((entry) => {
       // Step 1: Calculate deltaT
-      const deltaT = insideTemperature - entry.outside_temp
+      const deltaT = parsedInsideTemperature - entry.outside_temp
 
       // Step 2: Calculate heat loss
-      const heatloss = entry.outside_temp > insideTemperature ? 0 : (7.5 / 32) * deltaT
+      const heatloss = entry.outside_temp > parsedInsideTemperature ? 0 : (7.5 / 32) * deltaT
 
       // Step 3: Calculate added effect for 3 kW and 5.2 kW
       const threeKwEffect = Math.min(heatloss, 3)
       const fiveKwEffect = Math.min(heatloss, 5.2)
 
       // Step 4: Calculate electricity price with adjustments
-      const statsafgiftMedMoms = statsafgift * (moms / 100 + 1)
-      const adjustedElectricityPrice = parseFloat(entry.electricity_price) + tarif - statsafgiftMedMoms * 0.22
+      const statsafgiftMedMoms = parsedStatsafgift * (parsedMoms / 100 + 1)
+      const adjustedElectricityPrice = parseFloat(entry.electricity_price) + parsedTarif - statsafgiftMedMoms * 0.22
 
       // Step 5: Calculate savings
-      const savingThreeKWAlwaysOn = ((districtHeatingPrice - adjustedElectricityPrice) * threeKwEffect) / 1000
-      const savingFiveKWAlwaysOn = ((districtHeatingPrice - adjustedElectricityPrice) * fiveKwEffect) / 1000
+      const savingThreeKWAlwaysOn = ((parsedDistrictHeatingPrice - adjustedElectricityPrice) * threeKwEffect) / 1000
+      const savingFiveKWAlwaysOn = ((parsedDistrictHeatingPrice - adjustedElectricityPrice) * fiveKwEffect) / 1000
 
       // Step 6: Calculate controlled savings
       const savingThreeKWControlled = savingThreeKWAlwaysOn > 0 ? savingThreeKWAlwaysOn : 0
