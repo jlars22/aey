@@ -24,6 +24,7 @@ export default function Simulation() {
   const [tarif, setTarif] = useState(1139.5)
   const [statsafgift, setStatsafgift] = useState(761)
   const [moms, setMoms] = useState(25)
+  const [taxReductionRate, setTaxReductionRate] = useState(22)
   const [loading, setLoading] = useState(false)
   const [savingThreeKw, setSavingThreeKw] = useState(-1)
   const [savingFiveKw, setSavingFiveKw] = useState(-1)
@@ -51,8 +52,16 @@ export default function Simulation() {
     const parsedTarif = parseFloat(tarif)
     const parsedStatsafgift = parseFloat(statsafgift)
     const parsedMoms = parseFloat(moms)
+    const parsedTaxReductionRate = parseFloat(taxReductionRate)
 
-    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTarif, parsedStatsafgift, parsedMoms)
+    console.log(
+      parsedInsideTemperature,
+      parsedDistrictHeatingPrice,
+      parsedTarif,
+      parsedStatsafgift,
+      parsedMoms,
+      parsedTaxReductionRate
+    )
 
     // Iterate over each data entry and perform the calculations
     getData().forEach((entry) => {
@@ -68,7 +77,9 @@ export default function Simulation() {
 
       // Step 4: Calculate electricity price with adjustments
       const statsafgiftMedMoms = parsedStatsafgift * (parsedMoms / 100 + 1)
-      const adjustedElectricityPrice = parseFloat(entry.electricity_price) + parsedTarif - statsafgiftMedMoms * 0.22
+      console.log(statsafgiftMedMoms)
+      const adjustedElectricityPrice =
+        parseFloat(entry.electricity_price) + parsedTarif - statsafgiftMedMoms * (parsedTaxReductionRate / 100)
 
       // Step 5: Calculate savings
       const savingThreeKWAlwaysOn = ((parsedDistrictHeatingPrice - adjustedElectricityPrice) * threeKwEffect) / 1000
@@ -195,6 +206,26 @@ export default function Simulation() {
             value={moms}
             onChange={(e) => setMoms(e.target.value)}
             helperText='Indtast momssatsen i procent.'
+          />
+
+          <TextField
+            label='Skattereduktionssats'
+            variant='outlined'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <RiGovernmentFill color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>%</InputAdornment>
+              }
+            }}
+            placeholder={'0.22'}
+            value={taxReductionRate}
+            onChange={(e) => setTaxReductionRate(e.target.value)}
+            helperText='Indtast skattereduktionssatsen for virksomheder i procent.'
           />
 
           <Button
