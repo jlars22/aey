@@ -222,7 +222,7 @@ export default function Simulation() {
                 endAdornment: <InputAdornment position='end'>%</InputAdornment>
               }
             }}
-            placeholder={'0.22'}
+            placeholder={'22'}
             value={taxReductionRate}
             onChange={(e) => setTaxReductionRate(e.target.value)}
             helperText='Indtast skattereduktionssatsen for virksomheder i procent.'
