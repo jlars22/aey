@@ -8,7 +8,10 @@ import {
   Box,
   Button,
   CircularProgress,
-  FormHelperText
+  FormHelperText,
+  FormGroup,
+  FormControlLabel,
+  Checkbox
 } from '@mui/material'
 import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
@@ -16,18 +19,15 @@ import { getData } from 'Api/data'
 import { CiTempHigh } from 'react-icons/ci'
 import { FaPlay } from 'react-icons/fa'
 import { GiHeatHaze } from 'react-icons/gi'
-import { RiGovernmentFill } from 'react-icons/ri'
 
 export default function Simulation() {
   const [districtHeatingPrice, setDistrictHeatingPrice] = useState(725)
   const [insideTemperature, setInsideTemperature] = useState(17)
   const [tarif, setTarif] = useState(1139.5)
-  const [statsafgift, setStatsafgift] = useState(761)
-  const [moms, setMoms] = useState(25)
-  const [taxReductionRate, setTaxReductionRate] = useState(22)
   const [loading, setLoading] = useState(false)
   const [savingThreeKw, setSavingThreeKw] = useState(-1)
   const [savingFiveKw, setSavingFiveKw] = useState(-1)
+  const [electricityReduction, setElectricityReduction] = useState(true)
 
   const handleStartSimulation = () => {
     try {
@@ -43,6 +43,10 @@ export default function Simulation() {
     }
   }
 
+  const toggleReduction = () => {
+    setElectricityReduction(!electricityReduction)
+  }
+
   const calculateSaving = () => {
     let totalSavingThreeKWControlled = 0
     let totalSavingFiveKWControlled = 0
@@ -50,18 +54,8 @@ export default function Simulation() {
     const parsedInsideTemperature = parseFloat(insideTemperature)
     const parsedDistrictHeatingPrice = parseFloat(districtHeatingPrice)
     const parsedTarif = parseFloat(tarif)
-    const parsedStatsafgift = parseFloat(statsafgift)
-    const parsedMoms = parseFloat(moms)
-    const parsedTaxReductionRate = parseFloat(taxReductionRate)
 
-    console.log(
-      parsedInsideTemperature,
-      parsedDistrictHeatingPrice,
-      parsedTarif,
-      parsedStatsafgift,
-      parsedMoms,
-      parsedTaxReductionRate
-    )
+    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTarif)
 
     // Iterate over each data entry and perform the calculations
     getData().forEach((entry) => {
@@ -76,10 +70,11 @@ export default function Simulation() {
       const fiveKwEffect = Math.min(heatloss, 5.2)
 
       // Step 4: Calculate electricity price with adjustments
-      const statsafgiftMedMoms = parsedStatsafgift * (parsedMoms / 100 + 1)
-      console.log(statsafgiftMedMoms)
-      const adjustedElectricityPrice =
-        parseFloat(entry.electricity_price) + parsedTarif - statsafgiftMedMoms * (parsedTaxReductionRate / 100)
+      let adjustedElectricityPrice = parseFloat(entry.electricity_price) + parsedTarif
+
+      if (electricityReduction) {
+        adjustedElectricityPrice = adjustedElectricityPrice - 761 * 1.25 * 0.22
+      }
 
       // Step 5: Calculate savings
       const savingThreeKWAlwaysOn = ((parsedDistrictHeatingPrice - adjustedElectricityPrice) * threeKwEffect) / 1000
@@ -149,7 +144,7 @@ export default function Simulation() {
           />
 
           <TextField
-            label='Tarif'
+            label='Afgift på el'
             variant='outlined'
             slotProps={{
               input: {
@@ -165,68 +160,20 @@ export default function Simulation() {
             placeholder={'1139.5'}
             value={tarif}
             onChange={(e) => setTarif(e.target.value)}
-            helperText='Indtast tarifen for elektricitet i kroner per megawatt-time.'
+            helperText='Indtast afgiften og tarifen samlet for elektricitet i kroner per megawatt-time.'
           />
 
-          <TextField
-            label='Statsafgift'
-            variant='outlined'
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <RiGovernmentFill color='#46AD8D' size='20' />
-                  </InputAdornment>
-                ),
-
-                endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
-              }
-            }}
-            placeholder={'761'}
-            value={statsafgift}
-            onChange={(e) => setStatsafgift(e.target.value)}
-            helperText='Indtast statsafgiften for elektricitet i kroner per megawatt-time.'
-          />
-
-          <TextField
-            label='Moms'
-            variant='outlined'
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <RiGovernmentFill color='#46AD8D' size='20' />
-                  </InputAdornment>
-                ),
-
-                endAdornment: <InputAdornment position='end'>%</InputAdornment>
-              }
-            }}
-            placeholder={'25'}
-            value={moms}
-            onChange={(e) => setMoms(e.target.value)}
-            helperText='Indtast momssatsen i procent.'
-          />
-
-          <TextField
-            label='Skattereduktionssats'
-            variant='outlined'
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <RiGovernmentFill color='#46AD8D' size='20' />
-                  </InputAdornment>
-                ),
-
-                endAdornment: <InputAdornment position='end'>%</InputAdornment>
-              }
-            }}
-            placeholder={'22'}
-            value={taxReductionRate}
-            onChange={(e) => setTaxReductionRate(e.target.value)}
-            helperText='Indtast skattereduktionssatsen for virksomheder i procent.'
-          />
+          <div style={{ marginLeft: '15px' }}>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox defaultChecked onClick={() => toggleReduction()} />}
+                label='Er beregningen for en virksomhed?'
+              />
+              <FormHelperText sx={{ marginLeft: '31.5px', marginTop: '-10px' }}>
+                Dette vil give en reduktion i elprisen.
+              </FormHelperText>
+            </FormGroup>
+          </div>
 
           <Button
             variant='contained'
