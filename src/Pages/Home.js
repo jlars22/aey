@@ -11,7 +11,7 @@ function Home() {
         </Typography>
         <Link to='/today'>
           <Button variant='contained' style={{ marginBottom: '30px', fontWeight: 'bold' }} size='large'>
-            Elpris vs. Fjernvarmepris
+            Electricity vs. Districtheating
           </Button>
         </Link>
         <Link to='/simulation'>

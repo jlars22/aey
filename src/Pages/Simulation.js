@@ -23,7 +23,7 @@ import { GiHeatHaze } from 'react-icons/gi'
 export default function Simulation() {
   const [districtHeatingPrice, setDistrictHeatingPrice] = useState(725)
   const [insideTemperature, setInsideTemperature] = useState(17)
-  const [tarif, setTarif] = useState(1139.5)
+  const [elafgift, setElafgift] = useState(1139.5)
   const [loading, setLoading] = useState(false)
   const [savingThreeKw, setSavingThreeKw] = useState(-1)
   const [savingFiveKw, setSavingFiveKw] = useState(-1)
@@ -53,9 +53,9 @@ export default function Simulation() {
 
     const parsedInsideTemperature = parseFloat(insideTemperature)
     const parsedDistrictHeatingPrice = parseFloat(districtHeatingPrice)
-    const parsedTarif = parseFloat(tarif)
+    const parsedTariff = parseFloat(elafgift)
 
-    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTarif)
+    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTariff)
 
     // Iterate over each data entry and perform the calculations
     getData().forEach((entry) => {
@@ -70,7 +70,7 @@ export default function Simulation() {
       const fiveKwEffect = Math.min(heatloss, 5.2)
 
       // Step 4: Calculate electricity price with adjustments
-      let adjustedElectricityPrice = parseFloat(entry.electricity_price) + parsedTarif
+      let adjustedElectricityPrice = parseFloat(entry.electricity_price) + parsedTariff
 
       if (electricityReduction) {
         adjustedElectricityPrice = adjustedElectricityPrice - 761 * 1.25 * 0.22
@@ -104,7 +104,7 @@ export default function Simulation() {
         </Typography>
         <Stack spacing={2}>
           <TextField
-            label='Inde temperatur'
+            label='Indoor temperature'
             variant='outlined'
             slotProps={{
               input: {
@@ -120,11 +120,11 @@ export default function Simulation() {
             placeholder={'17'}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
-            helperText='Indtast den ønskede indendørs temperatur i grader Celsius.'
+            helperText='Enter the desired indoor temperature in degrees Celsius.'
           />
 
           <TextField
-            label='Fjernevarmepris'
+            label='District heating price'
             variant='outlined'
             slotProps={{
               input: {
@@ -140,11 +140,11 @@ export default function Simulation() {
             placeholder={'725'}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
-            helperText='Indtast prisen for fjernvarme i kroner per megawatt-time.'
+            helperText='Enter the price for district heating in kroner per megawatt-hour.'
           />
 
           <TextField
-            label='Afgift på el'
+            label='Electricity tariff'
             variant='outlined'
             slotProps={{
               input: {
@@ -158,19 +158,19 @@ export default function Simulation() {
               }
             }}
             placeholder={'1139.5'}
-            value={tarif}
-            onChange={(e) => setTarif(e.target.value)}
-            helperText='Indtast afgiften og tarifen samlet for elektricitet i kroner per megawatt-time.'
+            value={elafgift}
+            onChange={(e) => setElafgift(e.target.value)}
+            helperText='Enter the combined tax and tariff for electricity in kroner per megawatt-hour.'
           />
 
           <div style={{ marginLeft: '15px' }}>
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox defaultChecked onClick={() => toggleReduction()} />}
-                label='Er beregningen for en virksomhed?'
+                label='Is this calculation for a business?'
               />
               <FormHelperText sx={{ marginLeft: '31.5px', marginTop: '-10px' }}>
-                Dette vil give en reduktion i elprisen.
+                This will provide a reduction in the electricity price.
               </FormHelperText>
             </FormGroup>
           </div>
@@ -185,35 +185,33 @@ export default function Simulation() {
           </Button>
 
           <FormHelperText>
-            Alle eksempel værdierne og de anvendte elspotpriser samt udendørs temperaturer er eksempler fra Danmark i
-            2023.
+            All example values and the electricity spot prices used, as well as outdoor temperatures, are examples from
+            Denmark in 2023.
           </FormHelperText>
         </Stack>
 
         <Box sx={{ marginTop: '20px' }}>
           <Typography variant='h4' style={{ fontWeight: 'bold' }} gutterBottom>
-            RESULTAT
+            RESULT
           </Typography>
           {loading ? (
             <CircularProgress />
           ) : savingThreeKw === -1 ? (
-            <FormHelperText>
-              Indtast venligst værdierne og tryk på "Start Simulation" for at se resultatet.
-            </FormHelperText>
+            <FormHelperText>Please enter the values and click "Start Simulation" to see the result.</FormHelperText>
           ) : savingThreeKw > 0 ? (
             <Typography variant='h6' color=''>
-              Ved brug af en el-patron på 3 kW kan du spare{' '}
-              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingThreeKw.toFixed(2)} kr</span> om året ved at
-              bruge vores produkt.
+              By using a 3 kW electric heating element, you can save{' '}
+              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingThreeKw.toFixed(2)} kr</span> per year by
+              using our product.
               <br />
-              Ved brug af en el-patron på 5.2 kW kan du spare{' '}
-              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingFiveKw.toFixed(2)} kr</span> om året ved at
-              bruge vores produkt.
+              By using a 5.2 kW electric heating element, you can save{' '}
+              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingFiveKw.toFixed(2)} kr</span> per year by
+              using our product.
             </Typography>
           ) : (
             <>
               <Typography variant='h6' color='red'>
-                Du kan ikke desværre ikke spare penge ved at bruge vores produkt.
+                Unfortunately, you cannot save money by using our product.
               </Typography>
             </>
           )}

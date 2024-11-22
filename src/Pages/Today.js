@@ -1,10 +1,10 @@
 import { Typography, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress, Box } from '@mui/material'
 import '../App.css'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BackButton from '../Components/BackButton'
 import { CalendarIcon } from '@mui/x-date-pickers'
 import { HEAT_PRICE_KWH } from '../Constants'
-import { getPricesByDate } from '../Api/Elprisenligenu'
+import { getPricesByDate } from 'Api/Elprisenligenu'
 
 function Today() {
   const [electricityPrices, setElectricityPrices] = useState([])
@@ -54,7 +54,7 @@ function Today() {
           <>
             <BackButton />
             <Typography variant='h3' style={{ fontWeight: 'bold' }}>
-              ELPRIS VS. FJERNVARMEPRIS
+              ELECTRICITY PRICE VS. DISTRICT HEATING PRICE
             </Typography>
 
             <Typography variant='h6'>
@@ -67,27 +67,27 @@ function Today() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Tidsinterval</TableCell>
-                  <TableCell>Elpris (kr/kWh)</TableCell>
-                  <TableCell>Fjernvarmepris (kr/kWh)</TableCell>
-                  <TableCell>Billigst</TableCell>
+                  <TableCell>Time Interval</TableCell>
+                  <TableCell>Electricity Price (kr/kWh)</TableCell>
+                  <TableCell>District Heating Price (kr/kWh)</TableCell>
+                  <TableCell>Cheapest</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {electricityPrices.map((price, index) => {
                   const isElectricityCheaper = price.DKK_per_kWh < HEAT_PRICE_KWH
                   const isCurrentInterval =
-                    currentPrice &&
-                    price.time_start === currentPrice.time_start &&
-                    price.time_end === currentPrice.time_end
+                    price.time_start === currentPrice.time_start && price.time_end === currentPrice.time_end
+
+                  console.log(isCurrentInterval)
 
                   return (
                     <TableRow
                       key={index}
-                      style={{
-                        borderColor: isCurrentInterval ? '#46AD8D' : '',
-                        borderWidth: isCurrentInterval ? '2px' : '',
-                        borderStyle: isCurrentInterval ? 'solid' : ''
+                      sx={{
+                        ...(isCurrentInterval && {
+                          backgroundColor: '#35856b'
+                        })
                       }}
                     >
                       <TableCell>
@@ -98,9 +98,9 @@ function Today() {
                       <TableCell>{HEAT_PRICE_KWH.toFixed(2)} kr</TableCell>
                       <TableCell>
                         {isElectricityCheaper ? (
-                          <span style={{ color: 'green' }}>Strøm</span>
+                          <span style={{ color: 'green' }}>Electricity</span>
                         ) : (
-                          <span style={{ color: 'red' }}>Fjernvarme</span>
+                          <span style={{ color: 'red' }}>District Heating</span>
                         )}
                       </TableCell>
                     </TableRow>
