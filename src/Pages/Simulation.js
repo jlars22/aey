@@ -243,67 +243,132 @@ export default function Simulation() {
                   </LineChart>
                 </ResponsiveContainer>
               </Box>
+
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '1200px',
+                  marginTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='electricityPrice'
+                      stroke='#9d82ca'
+                      name='Electricity Price'
+                      dot={false}
+                    />
+                    <Line
+                      type='monotone'
+                      dataKey='districtHeatingPrice'
+                      stroke='#e76853'
+                      name='District Heating Price'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis
+                      tick={{ fontSize: 14, fill: '#ccc' }}
+                      tickFormatter={(value) => `${value} °C`}
+                      ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
+                    />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='outsideTemp'
+                      stroke='#82a9ca'
+                      name='Outside Temperature'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                    <Legend />
+                    <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Box>
             </>
           ) : (
             <>
               <Typography variant='h6' color='red'>
                 Unfortunately, you cannot save money by using our product.
               </Typography>
+
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '1200px',
+                  marginTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='electricityPrice'
+                      stroke='#9d82ca'
+                      name='Electricity Price'
+                      dot={false}
+                    />
+                    <Line
+                      type='monotone'
+                      dataKey='districtHeatingPrice'
+                      stroke='#e76853'
+                      name='District Heating Price'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis
+                      tick={{ fontSize: 14, fill: '#ccc' }}
+                      tickFormatter={(value) => `${value} °C`}
+                      ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
+                    />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='outsideTemp'
+                      stroke='#82a9ca'
+                      name='Outside Temperature'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                    <Legend />
+                    <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Box>
             </>
           )}
-
-          <Box
-            sx={{
-              width: '100%',
-              height: '1200px',
-              marginTop: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
-              <LineChart data={chartData}>
-                <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
-                <Legend />
-                <Line
-                  type='monotone'
-                  dataKey='electricityPrice'
-                  stroke='#9d82ca'
-                  name='Electricity Price'
-                  dot={false}
-                />
-                <Line
-                  type='monotone'
-                  dataKey='districtHeatingPrice'
-                  stroke='#e76853'
-                  name='District Heating Price'
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-
-            <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-              <LineChart data={chartData}>
-                <YAxis
-                  tick={{ fontSize: 14, fill: '#ccc' }}
-                  tickFormatter={(value) => `${value} °C`}
-                  ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
-                />
-                <Legend />
-                <Line type='monotone' dataKey='outsideTemp' stroke='#82a9ca' name='Outside Temperature' dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-
-            <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-              <LineChart data={chartData}>
-                <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                <Legend />
-                <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Box>
         </Box>
       </header>
     </div>
