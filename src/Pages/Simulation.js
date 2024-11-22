@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from 'react'
 import {
   Typography,
@@ -13,6 +12,7 @@ import {
   FormControlLabel,
   Checkbox
 } from '@mui/material'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
@@ -28,13 +28,14 @@ export default function Simulation() {
   const [savingThreeKw, setSavingThreeKw] = useState(-1)
   const [savingFiveKw, setSavingFiveKw] = useState(-1)
   const [electricityReduction, setElectricityReduction] = useState(true)
+  const [chartData, setChartData] = useState([])
 
   const handleStartSimulation = () => {
     try {
       setSavingThreeKw(-1)
       setSavingFiveKw(-1)
+      setChartData([])
       setLoading(true)
-
       calculateSaving()
     } catch (error) {
       console.error('An error occurred while starting the simulation', error)
@@ -50,12 +51,11 @@ export default function Simulation() {
   const calculateSaving = () => {
     let totalSavingThreeKWControlled = 0
     let totalSavingFiveKWControlled = 0
+    const simulationChartData = []
 
     const parsedInsideTemperature = parseFloat(insideTemperature)
     const parsedDistrictHeatingPrice = parseFloat(districtHeatingPrice)
     const parsedTariff = parseFloat(elafgift)
-
-    console.log(parsedInsideTemperature, parsedDistrictHeatingPrice, parsedTariff)
 
     // Iterate over each data entry and perform the calculations
     getData().forEach((entry) => {
@@ -87,11 +87,22 @@ export default function Simulation() {
       // Accumulate controlled savings for the final output
       totalSavingThreeKWControlled += savingThreeKWControlled
       totalSavingFiveKWControlled += savingFiveKWControlled
+
+      // Prepare chart data
+      simulationChartData.push({
+        outsideTemp: entry.outside_temp,
+        heatloss: heatloss,
+        savings3kW: savingThreeKWControlled,
+        savings5kW: savingFiveKWControlled,
+        electricityPrice: adjustedElectricityPrice,
+        districtHeatingPrice: parsedDistrictHeatingPrice
+      })
     })
 
     // Set the calculated total savings for controlled modes
     setSavingThreeKw(totalSavingThreeKWControlled)
     setSavingFiveKw(totalSavingFiveKWControlled)
+    setChartData(simulationChartData)
   }
 
   return (
@@ -183,11 +194,6 @@ export default function Simulation() {
           >
             START SIMULATION
           </Button>
-
-          <FormHelperText>
-            All example values and the electricity spot prices used, as well as outdoor temperatures, are examples from
-            Denmark in 2023.
-          </FormHelperText>
         </Stack>
 
         <Box sx={{ marginTop: '20px' }}>
@@ -199,15 +205,104 @@ export default function Simulation() {
           ) : savingThreeKw === -1 ? (
             <FormHelperText>Please enter the values and click "Start Simulation" to see the result.</FormHelperText>
           ) : savingThreeKw > 0 ? (
-            <Typography variant='h6' color=''>
-              By using a 3 kW electric heating element, you can save{' '}
-              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingThreeKw.toFixed(2)} kr</span> per year by
-              using our product.
-              <br />
-              By using a 5.2 kW electric heating element, you can save{' '}
-              <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingFiveKw.toFixed(2)} kr</span> per year by
-              using our product.
-            </Typography>
+            <>
+              <Typography variant='h6' color=''>
+                By using a 3 kW electric heating element, you can save{' '}
+                <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{savingThreeKw.toFixed(2)} kr</span> per year by
+                using our product.
+                <br />
+                By using a 5.2 kW electric heating element, you can save{' '}
+                <span style={{ fontWeight: 'bold', color: '#ffc658' }}>{savingFiveKw.toFixed(2)} kr</span> per year by
+                using our product.
+              </Typography>
+
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '800px',
+                  marginTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <ResponsiveContainer width='100%' height='80%'>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
+                    <Legend />
+                    <Line type='monotone' dataKey='savings3kW' stroke='#82ca9d' name='3kW Savings' dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%'>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
+                    <Legend />
+                    <Line type='monotone' dataKey='savings5kW' stroke='#ffc658' name='5kW Savings' dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Box>
+
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '1200px',
+                  marginTop: '20px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='electricityPrice'
+                      stroke='#9d82ca'
+                      name='Electricity Price'
+                      dot={false}
+                    />
+                    <Line
+                      type='monotone'
+                      dataKey='districtHeatingPrice'
+                      stroke='#e76853'
+                      name='District Heating Price'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis
+                      tick={{ fontSize: 14, fill: '#ccc' }}
+                      tickFormatter={(value) => `${value} °C`}
+                      ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
+                    />
+                    <Legend />
+                    <Line
+                      type='monotone'
+                      dataKey='outsideTemp'
+                      stroke='#82a9ca'
+                      name='Outside Temperature'
+                      dot={false}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+
+                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
+                  <LineChart data={chartData}>
+                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                    <Legend />
+                    <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </Box>
+            </>
           ) : (
             <>
               <Typography variant='h6' color='red'>
