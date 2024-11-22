@@ -128,6 +128,11 @@ export default function Simulation() {
                 endAdornment: <InputAdornment position='end'>°C</InputAdornment>
               }
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
             placeholder={'17'}
             value={insideTemperature}
             onChange={(e) => setInsideTemperature(e.target.value)}
@@ -148,6 +153,11 @@ export default function Simulation() {
                 endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
               }
             }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
             placeholder={'725'}
             value={districtHeatingPrice}
             onChange={(e) => setDistrictHeatingPrice(e.target.value)}
@@ -166,6 +176,11 @@ export default function Simulation() {
                 ),
 
                 endAdornment: <InputAdornment position='end'>Kr/MWh</InputAdornment>
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
               }
             }}
             placeholder={'1139.5'}
