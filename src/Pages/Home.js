@@ -15,8 +15,13 @@ function Home() {
           </Button>
         </Link>
         <Link to='/simulation'>
-          <Button variant='contained' style={{ fontWeight: 'bold' }} size='large'>
+          <Button variant='contained' style={{ marginBottom: '30px', fontWeight: 'bold' }} size='large'>
             Simulation
+          </Button>
+        </Link>
+        <Link to='/solarcell'>
+          <Button variant='contained' style={{ fontWeight: 'bold' }} size='large'>
+            Solarcell Simulation
           </Button>
         </Link>
       </header>
