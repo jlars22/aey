@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, Stack, Button, CircularProgress, Box, FormHelperText } from '@mui/material'
+import { Typography, Stack, Button, CircularProgress, Box, FormHelperText, Grid } from '@mui/material'
 import { LineChart, Line, YAxis, Legend, ResponsiveContainer } from 'recharts'
 import BackButton from '../Components/BackButton'
 import { getSolarData } from 'Api/solarCellData'
@@ -73,12 +73,22 @@ export default function SolarCell() {
             <FormHelperText>Please click "Start Simulation" to see the result.</FormHelperText>
           ) : (
             <>
-              <FormHelperText>
-                Sale Price for Electricity: <span style={{ fontWeight: 'bold' }}>{salgspris} kr</span>
-              </FormHelperText>
-              <FormHelperText>
-                District Heating Price: <span style={{ fontWeight: 'bold' }}>{Fjernevarmepris} kr</span>
-              </FormHelperText>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  marginBottom: '20px'
+                }}
+              >
+                <FormHelperText>
+                  Sale Price for Electricity: <span style={{ fontWeight: 'bold' }}>{salgspris} kr</span>
+                </FormHelperText>
+                <FormHelperText>
+                  District Heating Price: <span style={{ fontWeight: 'bold' }}>{Fjernevarmepris} kr</span>
+                </FormHelperText>
+              </div>
               <Typography variant='h6'>
                 Total Savings with 3kW:{' '}
                 <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{totalBesparelse3.toFixed(2)} kr</span>
@@ -87,58 +97,79 @@ export default function SolarCell() {
                 Total Savings with 5kW:{' '}
                 <span style={{ fontWeight: 'bold', color: '#ffc658' }}>{totalBesparelse5.toFixed(2)} kr</span>
               </Typography>
+              <Grid container spacing={2} sx={{ marginTop: '20px' }}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='solarProduktion'
+                          stroke='#9d82ca'
+                          name='Solar Production'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-              <Box sx={{ width: '100%', height: '800px', marginTop: '20px' }}>
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='solarProduktion'
-                      stroke='#9d82ca'
-                      name='Solar Production'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='elforbruget'
+                          stroke='#82a9ca'
+                          name='Power Consumption'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line type='monotone' dataKey='elforbruget' stroke='#82a9ca' name='Power Consumption' dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='overskudsproduktion3'
+                          stroke='#82ca9d'
+                          name='Excess Production (3kW)'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='overskudsproduktion3'
-                      stroke='#82ca9d'
-                      name='Excess Production (3kW)'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='overskudsproduktion5'
-                      stroke='#ffc658'
-                      name='Excess Production (5kW)'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </Box>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='overskudsproduktion5'
+                          stroke='#ffc658'
+                          name='Excess Production (5kW)'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
+              </Grid>
             </>
           )}
         </Box>

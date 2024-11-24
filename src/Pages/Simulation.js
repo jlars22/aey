@@ -10,9 +10,10 @@ import {
   FormHelperText,
   FormGroup,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Grid
 } from '@mui/material'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { LineChart, Line, YAxis, Legend, ResponsiveContainer } from 'recharts'
 import BackButton from '../Components/BackButton'
 import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
@@ -209,6 +210,11 @@ export default function Simulation() {
           >
             START SIMULATION
           </Button>
+
+          <FormHelperText>
+            All example values and the used electricity spot prices as well as outdoor temperatures are examples from
+            Denmark in 2023.
+          </FormHelperText>
         </Stack>
 
         <Box sx={{ marginTop: '20px' }}>
@@ -231,92 +237,90 @@ export default function Simulation() {
                 using our product.
               </Typography>
 
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '800px',
-                  marginTop: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
-                    <Legend />
-                    <Line type='monotone' dataKey='savings3kW' stroke='#82ca9d' name='3kW Savings' dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
+              <Grid container spacing={2} sx={{ marginTop: '20px' }}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
+                        <Legend />
+                        <Line type='monotone' dataKey='savings3kW' stroke='#82ca9d' name='3kW Savings' dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
-                    <Legend />
-                    <Line type='monotone' dataKey='savings5kW' stroke='#ffc658' name='5kW Savings' dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </Box>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr`} />
+                        <Legend />
+                        <Line type='monotone' dataKey='savings5kW' stroke='#ffc658' name='5kW Savings' dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '1200px',
-                  marginTop: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='electricityPrice'
-                      stroke='#9d82ca'
-                      name='Electricity Price'
-                      dot={false}
-                    />
-                    <Line
-                      type='monotone'
-                      dataKey='districtHeatingPrice'
-                      stroke='#e76853'
-                      name='District Heating Price'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='electricityPrice'
+                          stroke='#9d82ca'
+                          name='Electricity Price'
+                          dot={false}
+                        />
+                        <Line
+                          type='monotone'
+                          dataKey='districtHeatingPrice'
+                          stroke='#e76853'
+                          name='District Heating Price'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-                  <LineChart data={chartData}>
-                    <YAxis
-                      tick={{ fontSize: 14, fill: '#ccc' }}
-                      tickFormatter={(value) => `${value} °C`}
-                      ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
-                    />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='outsideTemp'
-                      stroke='#82a9ca'
-                      name='Outside Temperature'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis
+                          tick={{ fontSize: 14, fill: '#ccc' }}
+                          tickFormatter={(value) => `${value} °C`}
+                          ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
+                        />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='outsideTemp'
+                          stroke='#82a9ca'
+                          name='Outside Temperature'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </Box>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
+              </Grid>
             </>
           ) : (
             <>
@@ -324,64 +328,66 @@ export default function Simulation() {
                 Unfortunately, you cannot save money by using our product.
               </Typography>
 
-              <Box
-                sx={{
-                  width: '100%',
-                  height: '1200px',
-                  marginTop: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}
-              >
-                <ResponsiveContainer style={{ marginTop: '30px' }} width='100%' height='80%'>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='electricityPrice'
-                      stroke='#9d82ca'
-                      name='Electricity Price'
-                      dot={false}
-                    />
-                    <Line
-                      type='monotone'
-                      dataKey='districtHeatingPrice'
-                      stroke='#e76853'
-                      name='District Heating Price'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+              <Grid container spacing={2} sx={{ marginTop: '20px' }}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kr/MWh`} />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='electricityPrice'
+                          stroke='#9d82ca'
+                          name='Electricity Price'
+                          dot={false}
+                        />
+                        <Line
+                          type='monotone'
+                          dataKey='districtHeatingPrice'
+                          stroke='#e76853'
+                          name='District Heating Price'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-                  <LineChart data={chartData}>
-                    <YAxis
-                      tick={{ fontSize: 14, fill: '#ccc' }}
-                      tickFormatter={(value) => `${value} °C`}
-                      ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
-                    />
-                    <Legend />
-                    <Line
-                      type='monotone'
-                      dataKey='outsideTemp'
-                      stroke='#82a9ca'
-                      name='Outside Temperature'
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis
+                          tick={{ fontSize: 14, fill: '#ccc' }}
+                          tickFormatter={(value) => `${value} °C`}
+                          ticks={[-15, -10, -5, 0, 5, 10, 15, 20]}
+                        />
+                        <Legend />
+                        <Line
+                          type='monotone'
+                          dataKey='outsideTemp'
+                          stroke='#82a9ca'
+                          name='Outside Temperature'
+                          dot={false}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
 
-                <ResponsiveContainer width='100%' height='80%' style={{ marginTop: '30px' }}>
-                  <LineChart data={chartData}>
-                    <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
-                    <Legend />
-                    <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </Box>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ width: '100%', height: '400px' }}>
+                    <ResponsiveContainer width='100%' height='100%'>
+                      <LineChart data={chartData}>
+                        <YAxis tick={{ fontSize: 14, fill: '#ccc' }} tickFormatter={(value) => `${value} kW`} />
+                        <Legend />
+                        <Line type='monotone' dataKey='heatloss' stroke='#00c9a5' name='Heatloss' dot={false} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
+              </Grid>
             </>
           )}
         </Box>
