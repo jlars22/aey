@@ -92,26 +92,45 @@ function Today() {
                 {electricityPrices.map((price, index) => {
                   const isElectricityCheaper = price.DKK_per_kWh < HEAT_PRICE_KWH
                   const isCurrentInterval =
-                    price.time_start === currentPrice.time_start && price.time_end === currentPrice.time_end
+                    currentPrice &&
+                    price.time_start === currentPrice.time_start &&
+                    price.time_end === currentPrice.time_end
 
-                  console.log(isCurrentInterval)
+                  const highlightColor = isCurrentInterval ? '#35856b' : 'inherit'
+
+                  console.log('Current Price:', currentPrice)
+                  console.log('Price:', price)
+                  console.log('isCurrentInterval:', isCurrentInterval)
 
                   return (
-                    <TableRow
-                      key={index}
-                      sx={{
-                        ...(isCurrentInterval && {
-                          backgroundColor: '#35856b'
-                        })
-                      }}
-                    >
-                      <TableCell>
+                    <TableRow key={index}>
+                      <TableCell
+                        sx={{
+                          backgroundColor: highlightColor
+                        }}
+                      >
                         {new Date(price.time_start).toLocaleTimeString('da-DK', timeOptions)} -{' '}
                         {new Date(price.time_end).toLocaleTimeString('da-DK', timeOptions)}
                       </TableCell>
-                      <TableCell>{price.DKK_per_kWh.toFixed(2)} kr</TableCell>
-                      <TableCell>{HEAT_PRICE_KWH.toFixed(2)} kr</TableCell>
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          backgroundColor: highlightColor
+                        }}
+                      >
+                        {price.DKK_per_kWh.toFixed(2)} kr
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          backgroundColor: highlightColor
+                        }}
+                      >
+                        {HEAT_PRICE_KWH.toFixed(2)} kr
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          backgroundColor: highlightColor
+                        }}
+                      >
                         {isElectricityCheaper ? (
                           <span style={{ color: 'green' }}>Electricity</span>
                         ) : (
