@@ -5,6 +5,9 @@ import BackButton from '../Components/BackButton'
 import { CalendarIcon } from '@mui/x-date-pickers'
 import { HEAT_PRICE_KWH } from '../Constants'
 import { getPricesByDate } from 'Api/Elprisenligenu'
+import { TbBuildingFactory } from 'react-icons/tb'
+import { MdElectricBolt, MdPriceCheck } from 'react-icons/md'
+import { IoMdTime } from 'react-icons/io'
 
 function Today() {
   const [electricityPrices, setElectricityPrices] = useState([])
@@ -67,10 +70,22 @@ function Today() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Time Interval</TableCell>
-                  <TableCell>Electricity Price (kr/kWh)</TableCell>
-                  <TableCell>District Heating Price (kr/kWh)</TableCell>
-                  <TableCell>Cheapest</TableCell>
+                  <TableCell>
+                    <IoMdTime size={24} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                    Time Interval
+                  </TableCell>
+                  <TableCell>
+                    <MdElectricBolt size={24} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                    Electricity Price (kr/kWh)
+                  </TableCell>
+                  <TableCell>
+                    <TbBuildingFactory size={24} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                    District Heating Price (kr/kWh)
+                  </TableCell>
+                  <TableCell>
+                    <MdPriceCheck size={24} style={{ verticalAlign: 'middle', marginRight: '5px' }} />
+                    Cheapest
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
