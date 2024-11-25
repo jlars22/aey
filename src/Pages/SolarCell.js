@@ -239,7 +239,7 @@ export default function SolarCell() {
                           type='monotone'
                           dataKey='overskudsproduktion3'
                           stroke='#82ca9d'
-                          name='Excess Production (3kW)'
+                          name='Power for central heating system (3kW)'
                           dot={false}
                         />
                       </LineChart>
@@ -257,7 +257,7 @@ export default function SolarCell() {
                           type='monotone'
                           dataKey='overskudsproduktion5'
                           stroke='#ffc658'
-                          name='Excess Production (5kW)'
+                          name='Power for central heating system (5kW)'
                           dot={false}
                         />
                       </LineChart>
