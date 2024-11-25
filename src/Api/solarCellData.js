@@ -1,4 +1,4 @@
-export function getSolarData() {
+export function getSolarData(solcelleAreal, boligAreal, salgspris, Fjernevarmepris) {
   const energi = require('./potentiale_el.json')
   const energi2 = require('./district_heating.json')
   const energi3 = require('./elforbrug_hotel.json')
@@ -7,7 +7,6 @@ export function getSolarData() {
   const radiation = energi2.map((item) => item['Hourly Global Solar Radiation (Wh/m2)'] / 1000)
   const airTemp = energi.map((item) => item['Delta T'])
 
-  const solcelleAreal = 50
   const nSolar = 0.2
 
   const solarProduktion = radiation.map((value) => value * nSolar * solcelleAreal)
@@ -17,7 +16,6 @@ export function getSolarData() {
 
   const consumption = energi3.map((item) => parseFloat(item['Consumption_MWh']))
   const elforbrugAlleHoteller = consumption.reduce((sum, value) => sum + value, 0)
-  const boligAreal = 200
   const elforbrugKunde = (51 * boligAreal) / 1000
   const faktor = elforbrugKunde / elforbrugAlleHoteller
 
@@ -31,9 +29,6 @@ export function getSolarData() {
   })
 
   const totalOverproduction = overskudsProduktion.reduce((sum, value) => sum + value, 0)
-
-  const salgspris = 0.29
-  const Fjernevarmepris = 0.68
 
   const besparelse = totalOverproduction * (Fjernevarmepris - salgspris)
 

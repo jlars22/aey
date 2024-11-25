@@ -19,7 +19,7 @@ import { MdElectricBolt } from 'react-icons/md'
 import { getData } from 'Api/data'
 import { CiTempHigh } from 'react-icons/ci'
 import { FaPlay } from 'react-icons/fa'
-import { GiHeatHaze } from 'react-icons/gi'
+import { TbBuildingFactory } from 'react-icons/tb'
 
 export default function Simulation() {
   const [districtHeatingPrice, setDistrictHeatingPrice] = useState(725)
@@ -147,7 +147,7 @@ export default function Simulation() {
               input: {
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <GiHeatHaze color='#46AD8D' size='20' />
+                    <TbBuildingFactory color='#46AD8D' size='20' />
                   </InputAdornment>
                 ),
 

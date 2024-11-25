@@ -1,9 +1,21 @@
 import React, { useState } from 'react'
-import { Typography, Stack, Button, CircularProgress, Box, FormHelperText, Grid } from '@mui/material'
+import {
+  Typography,
+  Stack,
+  Button,
+  CircularProgress,
+  Box,
+  FormHelperText,
+  TextField,
+  Grid,
+  InputAdornment
+} from '@mui/material'
 import { LineChart, Line, YAxis, Legend, ResponsiveContainer } from 'recharts'
 import BackButton from '../Components/BackButton'
 import { getSolarData } from 'Api/solarCellData'
-import { FaPlay } from 'react-icons/fa'
+import { FaPlay, FaRegBuilding } from 'react-icons/fa'
+import { PiSolarPanelFill } from 'react-icons/pi'
+import { TbBuildingFactory, TbSolarElectricity, TbSunElectricity } from 'react-icons/tb'
 
 export default function SolarCell() {
   const [loading, setLoading] = useState(false)
@@ -14,13 +26,15 @@ export default function SolarCell() {
   const [overskudsproduktion5, setOverskudsproduktion5] = useState([])
   const [totalBesparelse3, setTotalBesparelse3] = useState(0)
   const [totalBesparelse5, setTotalBesparelse5] = useState(0)
-  const [salgspris, setSalgspris] = useState(0)
-  const [Fjernevarmepris, setFjernevarmepris] = useState(0)
+  const [solcelleAreal, setSolcelleAreal] = useState(50)
+  const [boligAreal, setBoligAreal] = useState(200)
+  const [salgspris, setSalgspris] = useState(0.29)
+  const [Fjernevarmepris, setFjernevarmepris] = useState(0.68)
 
   const handleStartSimulation = () => {
     try {
       setLoading(true)
-      const data = getSolarData()
+      const data = getSolarData(solcelleAreal, boligAreal, salgspris, Fjernevarmepris)
       console.log('Solar Data:', data)
       setHour(data.hour)
       setElforbruget(data.elforbruget)
@@ -56,6 +70,102 @@ export default function SolarCell() {
           SOLAR CELL SIMULATION
         </Typography>
         <Stack spacing={2}>
+          <TextField
+            label='Solar Cell Area'
+            variant='outlined'
+            value={solcelleAreal}
+            onChange={(e) => setSolcelleAreal(e.target.value)}
+            helperText='Enter the area of the solar cells in square meters.'
+            placeholder='50'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <PiSolarPanelFill color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>m²</InputAdornment>
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
+          />
+          <TextField
+            label='Building Area'
+            variant='outlined'
+            value={boligAreal}
+            onChange={(e) => setBoligAreal(e.target.value)}
+            helperText='Enter the area of the building in square meters.'
+            placeholder='200'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <FaRegBuilding color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>m²</InputAdornment>
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
+          />
+          <TextField
+            label='Sale Price'
+            variant='outlined'
+            value={salgspris}
+            onChange={(e) => setSalgspris(e.target.value)}
+            helperText='Enter the sale price for electricity in kroner per kilowatt-hour.'
+            placeholder='0.29'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <TbSunElectricity color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>kr/kWh</InputAdornment>
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
+          />
+          <TextField
+            label='District Heating Price'
+            variant='outlined'
+            value={Fjernevarmepris}
+            onChange={(e) => setFjernevarmepris(e.target.value)}
+            helperText='Enter the price for district heating in kroner per kilowatt-hour.'
+            placeholder='0.68'
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <TbBuildingFactory color='#46AD8D' size='20' />
+                  </InputAdornment>
+                ),
+
+                endAdornment: <InputAdornment position='end'>kr/kWh</InputAdornment>
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleStartSimulation()
+              }
+            }}
+          />
           <Button
             variant='contained'
             style={{ fontWeight: 'bold' }}
@@ -73,22 +183,6 @@ export default function SolarCell() {
             <FormHelperText>Please click "Start Simulation" to see the result.</FormHelperText>
           ) : (
             <>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  marginBottom: '20px'
-                }}
-              >
-                <FormHelperText>
-                  Sale Price for Electricity: <span style={{ fontWeight: 'bold' }}>{salgspris} kr</span>
-                </FormHelperText>
-                <FormHelperText>
-                  District Heating Price: <span style={{ fontWeight: 'bold' }}>{Fjernevarmepris} kr</span>
-                </FormHelperText>
-              </div>
               <Typography variant='h6'>
                 Total Savings with 3kW:{' '}
                 <span style={{ fontWeight: 'bold', color: '#46AD8D' }}>{totalBesparelse3.toFixed(2)} kr</span>
@@ -97,6 +191,7 @@ export default function SolarCell() {
                 Total Savings with 5kW:{' '}
                 <span style={{ fontWeight: 'bold', color: '#ffc658' }}>{totalBesparelse5.toFixed(2)} kr</span>
               </Typography>
+
               <Grid container spacing={2} sx={{ marginTop: '20px' }}>
                 <Grid item xs={12} md={6}>
                   <Box sx={{ width: '100%', height: '400px' }}>
