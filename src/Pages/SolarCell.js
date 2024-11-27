@@ -35,7 +35,6 @@ export default function SolarCell() {
     try {
       setLoading(true)
       const data = getSolarData(solcelleAreal, boligAreal, salgspris, Fjernevarmepris)
-      console.log('Solar Data:', data)
       setHour(data.hour)
       setElforbruget(data.elforbruget)
       setSolarProduktion(data.solarProduktion)
@@ -59,8 +58,6 @@ export default function SolarCell() {
     overskudsproduktion3: overskudsproduktion3[index],
     overskudsproduktion5: overskudsproduktion5[index]
   }))
-
-  console.log('Chart Data:', chartData)
 
   return (
     <div className='App'>
@@ -205,6 +202,7 @@ export default function SolarCell() {
                           stroke='#9d82ca'
                           name='Solar Production'
                           dot={false}
+                          isAnimationActive={false}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -223,6 +221,7 @@ export default function SolarCell() {
                           stroke='#82a9ca'
                           name='Power Consumption'
                           dot={false}
+                          isAnimationActive={false}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -241,6 +240,7 @@ export default function SolarCell() {
                           stroke='#82ca9d'
                           name='Power for central heating system (3kW)'
                           dot={false}
+                          isAnimationActive={false}
                         />
                       </LineChart>
                     </ResponsiveContainer>
@@ -259,6 +259,7 @@ export default function SolarCell() {
                           stroke='#ffc658'
                           name='Power for central heating system (5kW)'
                           dot={false}
+                          isAnimationActive={false}
                         />
                       </LineChart>
                     </ResponsiveContainer>
