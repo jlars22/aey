@@ -15,7 +15,8 @@ import BackButton from '../Components/BackButton'
 import { getSolarData } from 'Api/solarCellData'
 import { FaPlay, FaRegBuilding } from 'react-icons/fa'
 import { PiSolarPanelFill } from 'react-icons/pi'
-import { TbBuildingFactory, TbSolarElectricity, TbSunElectricity } from 'react-icons/tb'
+import { TbSunElectricity } from 'react-icons/tb'
+import { GiHeatHaze } from 'react-icons/gi'
 
 export default function SolarCell() {
   const [loading, setLoading] = useState(false)
@@ -140,17 +141,17 @@ export default function SolarCell() {
             }}
           />
           <TextField
-            label='District Heating Price'
+            label='Current Price of Heating'
             variant='outlined'
             value={Fjernevarmepris}
             onChange={(e) => setFjernevarmepris(e.target.value)}
-            helperText='Enter the price for district heating in kroner per kilowatt-hour.'
+            helperText='Enter the price for heating in kroner per kilowatt-hour.'
             placeholder='0.68'
             slotProps={{
               input: {
                 startAdornment: (
                   <InputAdornment position='start'>
-                    <TbBuildingFactory color='#46AD8D' size='20' />
+                    <GiHeatHaze color='#46AD8D' size='20' />
                   </InputAdornment>
                 ),
 

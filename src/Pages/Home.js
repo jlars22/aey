@@ -1,4 +1,4 @@
-import { Button, Typography, Stack, Box, Card, CardContent } from '@mui/material'
+import { Button, Typography, Stack, Box } from '@mui/material'
 import { Link } from 'react-router-dom'
 import '../App.css'
 import React from 'react'
